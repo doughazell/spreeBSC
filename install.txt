@@ -176,4 +176,9 @@ Spree has been installed successfully. You're all ready to go!
  
 Enjoy!
 ~/src$ 
+~/src/spreeBSC$ rails g spree_ajax_add_to_cart:install
+         run  bundle exec rake railties:install:migrations FROM=spree_ajax_add_to_cart from "."
+Would you like to run the migrations now? [Y/n] 
+         run  bundle exec rake db:migrate from "."
+~/src/spreeBSC$ 
 

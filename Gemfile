@@ -5,7 +5,8 @@ gem 'rails', '3.2.14'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
+#gem 'sqlite3'
+gem 'pg'
 
 
 # Gems used only for assets and not required
@@ -40,3 +41,8 @@ gem 'jquery-rails'
 gem 'spree', '2.0.4'
 gem 'spree_gateway', :git => 'https://github.com/spree/spree_gateway.git', :branch => '2-0-stable'
 gem 'spree_auth_devise', :git => 'https://github.com/spree/spree_auth_devise.git', :branch => '2-0-stable'
+
+gem 'spree_ajax_add_to_cart', '2.0.0'
+
+gem 'spree_blue_theme', :git => 'git://github.com/knservis/spree_blue_theme.git'
+
