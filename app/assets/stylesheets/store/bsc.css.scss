@@ -1,0 +1,91 @@
+@import 'variables';
+
+$bsc_yellow: #CBCB67 !default;  /* Bespoke Silk Curtains Company yellow */
+
+body {
+  margin-top: x0px;
+  //background: #ffffff url(/assets/body-back.png) top left repeat-x;
+  //background: #ffffff url(/assets/store/luxury-kashmiri-silk-shawls.jpg) top repeat-x;
+  background: #ffffff url(/assets/store/luxury-kashmiri-silk-shawls.jpg) top no-repeat;
+  background-size: 100% 40%;
+  
+}
+
+#main-nav-bar a {
+  text-decoration: underline;
+  //color: #2e6ab1;
+  //color: white;
+  color: $bsc_yellow;
+}
+
+#main-nav-bar a:hover {
+  //color: #2e6ab1;
+  //color: #DDD527;
+  //color: $bsc_yellow;
+}
+
+#logo-block li {
+  display: block;
+  height: 25px;
+}
+
+#logo-header {
+  font-size: 17px;
+  text-transform: uppercase;
+  color: white;
+  line-height: 2.5em;
+  
+  //vertical-align: top;
+  //line-height: 10px;
+  //margin-bottom: 0px;
+  //width: 50px;
+  //height: 50px;
+  //display: block;
+  //float: left;
+}
+
+#logo-text {
+  font-size: 20px;
+  text-transform: uppercase;
+  color: $bsc_yellow;
+  
+  //text-indent:10px;
+  //width: 336px;
+  //width: 700px;
+  //height: 100px;
+  //display: block;
+  //float: left;
+}
+
+#logo-trailer {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: white;
+  //text-indent:10px;
+  
+  //width: 350px;
+  //display: block;
+  //float: left;
+}
+
+nav#taxonomies {
+  .taxonomy-root {
+    //text-transform: uppercase;
+    border-bottom: $default_border;
+    //border-bottom: 1px solid $border_color;
+    margin-bottom: 5px;
+    font-size: $main_navigation_header_font_size;
+  }
+
+  .taxons-list {
+    li {
+      a {
+        //font-size: $main_navigation_font_size
+        font-size: $main_navigation_font_size + 2;
+        //line-height: 2.5em;
+        line-height: 1.5em;
+      }
+    }
+  }
+  
+}
