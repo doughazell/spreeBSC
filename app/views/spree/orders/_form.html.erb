@@ -45,7 +45,12 @@
         <%# --- TOTAL --- %>
         <td class="cart-item-total" data-hook="cart_item_total">
           <%= item_form.object.display_amount.to_html unless item_form.object.quantity.nil? %>
-        </td>          
+        </td>
+        
+        <%# --- DELETE OPTION --- %>
+        <%#<td class="cart-item-delete" data-hook="cart_item_delete">%>
+          <%# link_to image_tag('icons/delete.png'), '#', :class => 'delete', :id => "delete_#{dom_id(item_form.object)}" %>
+        <%#</td>%>
           
       </tr>
       

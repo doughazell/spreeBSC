@@ -4,7 +4,9 @@
  * the top of the compiled file, but it's generally better to create a new file per style scope.
  *
 
- *= require store/spree_frontend
+ * require store/spree_frontend
+ *= require store/screen
+ * require store/spree_blue_theme
 
  *= require_self
  *= require_tree .

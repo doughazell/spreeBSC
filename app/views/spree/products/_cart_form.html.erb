@@ -23,7 +23,8 @@
     <% end%>
 
     <% if @product.price_in(current_currency) and !@product.price.nil? %>
-      <div data-hook="product_price" class="columns five <% if !@product.has_variants? %> alpha <% else %> omega <% end %>">
+      <%# class="columns five '%' if !@product.has_variants? '%' alpha '%' else '%' omega '%' end '%' %>
+      <div data-hook="product_price" class="columns sixteen <% if !@product.has_variants? %> alpha <% else %> omega <% end %>">
         
         <div id="product-price">
           <h6 class="product-section-title"><%= Spree.t(:price) %></h6>
@@ -39,7 +40,7 @@
 
         <div class="add-to-cart">
           <%= number_field_tag (@product.variants_and_option_values.any? ? :quantity : "variants[#{@product.master.id}]"),
-            1, :class => 'title', :min => 1, :onblur => "$('#add-to-cart-button').submit();" %>
+            1, :class => 'title', :min => 10, :onblur => "$('#add-to-cart-button').submit();" %>
 
           <%# :onchange => "$('#add-to-cart-button').submit();" %>
 
