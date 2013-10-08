@@ -47,7 +47,11 @@ OK, so let's get skeletal...
 
       </div>
 
+<%
+=begin %>
       <%= render :partial => 'taxons' %>
+<%
+=end %>
 
     </div>
   </div> <%# END - data-hook="product_right_part" %>
@@ -56,13 +60,62 @@ OK, so let's get skeletal...
   
   <br class="clear">
 
+  
+
   <div class="columns sixteen alpha" data-hook="bsc-form-cols">
     <div class="row" data-hook="bsc-form-row">
-      <div id="cart-form" data-hook="cart_form">
-        <%= render :partial => 'cart_form' %>
-      </div>
+      
+      <%# --- Previously ":partial => 'cart-form'" here... --- %>
+
+<%= form_for :order, :url => populate_orders_path do |f| %>
+
+      <h5 class="product-section-title">Curtain width</h5>
+      <%= number_field_tag 'width', nil, :id => 'width' %>
+
+      
+      
+      <%# --- Variants --- %>
+      <% if @product.variants_and_option_values(current_currency).any? %>
+        <div id="product-variants" class="columns five alpha">
+          <h5 class="product-section-title"><%= Spree.t(:variants) %></h5>
+          <ul>
+            <% @product.variants_and_option_values(current_currency).each_with_index do |variant, index| %>
+              <li>
+                <%= radio_button_tag "products[#{@product.id}]", variant.id, index == 0, 'data-price' => variant.price_in(current_currency).display_price %>
+                <label for="<%= ['products', @product.id, variant.id].join('_') %>">
+                  <span class="variant-description">
+                    <%= variant_options variant %>
+                  </span>
+                  <% if variant_price variant %>
+                    <span class="price diff"><%= variant_price variant %></span>
+                  <% end %>
+                </label>
+              </li>
+            <% end%>
+          </ul>
+        </div>
+      <% end%>
+      
+<div class="add-to-cart">
+  <%= number_field_tag (@product.variants_and_option_values.any? ? :quantity : "variants[#{@product.master.id}]"),
+            1, :class => 'title', :min => 1, :onblur => "$('#add-to-cart-button').submit();" %>
+  <%= button_tag :class => 'large primary', :id => 'add-to-cart-button', :type => :submit do %>
+    <%= Spree.t(:add_to_cart) %>
+  <% end %>
+</div>
+  
+<% end %>
+      
     </div>
   </div>
+  
+  <br>
+  <div>
+    <span class="doug text">
+      <%= "product ID: #{@product.master.id} = #{ @product.price }"  %>
+    </span>
+  </div>
+
 
 </div>
 

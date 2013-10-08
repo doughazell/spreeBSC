@@ -1,4 +1,6 @@
 $ ->
+  exports = this
+  
   Spree.addImageHandlers = ->
     thumbnails = ($ '#product-images ul.thumbnails')
     ($ '#main-image').data 'selectedThumb', ($ '#main-image img').attr('src')
@@ -34,7 +36,14 @@ $ ->
   Spree.updateVariantPrice = (variant) ->
     variantPrice = variant.data('price')
     ($ '.price.selling').text(variantPrice) if variantPrice
+    
+    # 8/10/13 DH: Now keep the current variant price for the dynamic pricing
+    exports.variantPrice = variantPrice
+    
   radios = ($ '#product-variants input[type="radio"]')
+  
+#  radios_current =  ($ '#product-variants input[type="radio"]:checked').val()
+  radios_current =  ($ '#product-variants input[type="radio"]:checked').attr('data-price')
 
   if radios.length > 0
     Spree.showVariantImages ($ '#product-variants input[type="radio"]').eq(0).attr('value')
@@ -45,4 +54,34 @@ $ ->
   radios.click (event) ->
     Spree.showVariantImages @value
     Spree.updateVariantPrice ($ this)
-    ($ '.doug.text').text(@value)
+    #($ '.doug.text').text( ($ this).data('price') )
+    
+  ###
+  --- BSC dynamic pricing ---
+  ###
+
+  width_field = ($ '#width')
+  
+#  ($ '.doug.text').text(width_field.attr('value'))
+  ($ '.doug.text').text(radios_current)
+  
+#  setTimeout -> 
+#    ($ '.doug.text').text("dum, de, dum...") 
+#   , 1000 
+  
+  
+#  width_field.click (event) ->
+#    ($ '.doug.text').text(@value)
+#    alert "Getting close..."
+  
+  # 'jQuery' event binding in CoffeeScript
+  # 8/10/13 DH: I feel I'm finally on home ground...ye haaa! :) That's only taken me 8 years since cutting the boot loader code...
+  $(document).on('blur', '#width', ( ->
+    width = (Number) @value
+    width += 12
+    
+    
+    ($ '.doug.text').text(exports.variantPrice)
+    
+  ))
+  

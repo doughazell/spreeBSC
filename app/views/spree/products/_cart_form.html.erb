@@ -1,6 +1,7 @@
 <%= form_for :order, :url => populate_orders_path do |f| %>
   <div id="inside-product-cart-form" data-hook="inside_product_cart_form" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 
+    <%# --- Variants --- %>
     <% if @product.variants_and_option_values(current_currency).any? %>
       <div id="product-variants" class="columns five alpha">
         <h6 class="product-section-title"><%= Spree.t(:variants) %></h6>
@@ -22,7 +23,9 @@
       </div>
     <% end%>
 
+    <%# --- Price --- %>
     <% if @product.price_in(current_currency) and !@product.price.nil? %>
+    
       <%# class="columns five '%' if !@product.has_variants? '%' alpha '%' else '%' omega '%' end '%' %>
       <div data-hook="product_price" class="columns sixteen <% if !@product.has_variants? %> alpha <% else %> omega <% end %>">
         
@@ -40,7 +43,7 @@
 
         <div class="add-to-cart">
           <%= number_field_tag (@product.variants_and_option_values.any? ? :quantity : "variants[#{@product.master.id}]"),
-            1, :class => 'title', :min => 10, :onblur => "$('#add-to-cart-button').submit();" %>
+            1, :class => 'title', :min => 1, :onblur => "$('#add-to-cart-button').submit();" %>
 
           <%# :onchange => "$('#add-to-cart-button').submit();" %>
 
@@ -58,13 +61,14 @@
 
 
       </div>
+    
     <% else %>
+    
         <div id="product-price">
           <br>
           <div><span class="price selling" itemprop="price"><%= Spree.t('product_not_available_in_this_currency') %></span></div>
         </div>
     <% end %>    
-
 
   </div>
 
