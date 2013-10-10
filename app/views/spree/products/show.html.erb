@@ -1,3 +1,6 @@
+<%= content_tag "div", id: "bsc-pricing", data: {returns_addition: Spree::Config[:returns_addition] } do %>
+<% end %>
+
 <div data-hook="product_show" itemscope itemtype="http://schema.org/Product">
   <% @body_id = 'product-details' %>
 
@@ -81,7 +84,7 @@ OK, so let's get skeletal...
           <ul>
             <% @product.variants_and_option_values(current_currency).each_with_index do |variant, index| %>
               <li>
-                <%= radio_button_tag "products[#{@product.id}]", variant.id, index == 0, 'data-price' => variant.price_in(current_currency).display_price %>
+                <%= radio_button_tag "products[#{@product.id}]", variant.id, index == 0, 'data-price' => variant.price_in(current_currency).display_price, 'data-heading' => variant.option_value("heading").downcase %>
                 <label for="<%= ['products', @product.id, variant.id].join('_') %>">
                   <span class="variant-description">
                     <%= variant_options variant %>

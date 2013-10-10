@@ -1,3 +1,4 @@
+# jQuery ->
 $ ->
   exports = this
   
@@ -78,10 +79,12 @@ $ ->
   # 8/10/13 DH: I feel I'm finally on home ground...ye haaa! :) That's only taken me 8 years since cutting the boot loader code...
   $(document).on('blur', '#width', ( ->
     width = (Number) @value
+    #width +=  Spree::Config[:returns_addition]
     width += 12
     
     
-    ($ '.doug.text').text(exports.variantPrice)
-    
+#    ($ '.doug.text').text(exports.variantPrice)
+#    ($ '.doug.text').text(($ '#product-variants input[type="radio"]:checked').attr('data-price'))    
+    ($ '.doug.text').text(width)
   ))
   
