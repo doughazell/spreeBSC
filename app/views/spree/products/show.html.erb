@@ -1,4 +1,15 @@
-<%= content_tag "div", id: "bsc-pricing", data: {returns_addition: Spree::Config[:returns_addition] } do %>
+<%= content_tag "div", id: "bsc-pricing", data: {
+returns_addition: Spree::Config[:returns_addition],
+side_hems_addition: Spree::Config[:side_hems_addition],
+turnings_addition: Spree::Config[:turnings_addition],
+
+pencil_pleat_multiple: Spree::Config[:pencil_pleat_multiple],
+deep_pencil_pleat_multiple: Spree::Config[:deep_pencil_pleat_multiple],
+double_pleat_multiple: Spree::Config[:double_pleat_multiple],
+triple_pleat_multiple: Spree::Config[:triple_pleat_multiple],
+eyelet_pleat_multiple: Spree::Config[:eyelet_pleat_multiple],
+
+fabric_width: Spree::Config[:fabric_width] } do %>
 <% end %>
 
 <div data-hook="product_show" itemscope itemtype="http://schema.org/Product">

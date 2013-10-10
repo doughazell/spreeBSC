@@ -1,3 +1,4 @@
+# 10/10/13 DH: Let's Monkey-patch the baby...it's a Ruby thing... :)
 Spree::AppConfiguration.class_eval do
 
   #preference :use_store_credit_minimum, :float, :default => 0.0
