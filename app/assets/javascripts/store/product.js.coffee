@@ -49,26 +49,27 @@ $ ->
   radios.click (event) ->
     Spree.showVariantImages @value
     Spree.updateVariantPrice ($ this)
-    #($ '.doug.text').text( ($ this).data('price') )
+    ($ '.doug.text').text(Spree.getCurrentMultiple)
     
   ###
   --- BSC dynamic pricing ---
   ###
 
-  width_field = ($ '#width')
+  Spree.getCurrentMultiple = ->
+    current_multiple = ($ '#product-variants input[type="radio"]:checked').data('heading')
+    
+    hyphened_heading = current_multiple.replace(/\ /g, '-')
+    hyphened_heading += "-multiple"
+    # Implicit return of last value
+    current_multiple_val = ($ '#bsc-pricing').data(hyphened_heading)    
 
+  # ------------------ Params (from initializer file) stored in web page via 'data-' attribute and used by jQuery --------------
   # Following numbers are in 'cm'
   returns_addition   = ($ '#bsc-pricing').data('returns-addition')
   side_hems_addition = ($ '#bsc-pricing').data('side-hems-addition')
   turnings_addition  = ($ '#bsc-pricing').data('turnings-addition')
 
   fabric_width = ($ '#bsc-pricing').data('fabric-width')
-  
-  pencil_pleat_multiple      = ($ '#bsc-pricing').data('pencil-pleat-multiple')
-  deep_pencil_pleat_multiple = ($ '#bsc-pricing').data('deep-pencil-pleat-multiple')
-  double_pleat_multiple      = ($ '#bsc-pricing').data('double-pleat-multiple')
-  triple_pleat_multiple      = ($ '#bsc-pricing').data('triple-pleat-multiple')
-  eyelet_pleat_multiple      = ($ '#bsc-pricing').data('eyelet-pleat-multiple')          
 
   # Following numbers are in '£/m'  
   cotton_lining   = ($ '#bsc-pricing').data('cotton-lining')
@@ -77,7 +78,8 @@ $ ->
 
   cotton_lining_labour   = ($ '#bsc-pricing').data('cotton-lining-labour')
   blackout_lining_labour = ($ '#bsc-pricing').data('blackout-lining-labour')
-  thermal_lining_labour  = ($ '#bsc-pricing').data('thermal-lining-labour')    
+  thermal_lining_labour  = ($ '#bsc-pricing').data('thermal-lining-labour')   
+  # ----------------------------------------------------------------------------------------------------------------------------- 
   
   # 'jQuery' event binding in CoffeeScript
   # 8/10/13 DH: I feel I'm finally on home ground...ye haaa! :) That's only taken me 8 years since cutting the boot loader code...
@@ -85,17 +87,14 @@ $ ->
     width = (Number) @value
     width += returns_addition
     
-    current_multiple = ($ '#product-variants input[type="radio"]:checked').data('heading')
-    
-    hyphened_heading = current_multiple.replace(/\ /g, '-')
-    hyphened_heading += "-multiple"
-    
-    current_multiple_val = ($ '#bsc-pricing').data(hyphened_heading)
-    
+    multiple = Spree.getCurrentMultiple()
+    required_width = width * multiple
+        
 #    ($ '.doug.text').text(($ '#product-variants input[type="radio"]:checked').attr('data-price')) 
 #    ($ '.doug.text').text(($ '#product-variants input[type="radio"]:checked').data('price'))    
 
-    ($ '.doug.text').text(current_multiple_val)
+    ($ '.doug.text').text(required_width)
 
   ))
+  
   
