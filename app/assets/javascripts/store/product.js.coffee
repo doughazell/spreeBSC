@@ -37,14 +37,8 @@ $ ->
   Spree.updateVariantPrice = (variant) ->
     variantPrice = variant.data('price')
     ($ '.price.selling').text(variantPrice) if variantPrice
-    
-    # 8/10/13 DH: Now keep the current variant price for the dynamic pricing
-    exports.variantPrice = variantPrice
-    
+        
   radios = ($ '#product-variants input[type="radio"]')
-  
-#  radios_current =  ($ '#product-variants input[type="radio"]:checked').val()
-  radios_current =  ($ '#product-variants input[type="radio"]:checked').attr('data-price')
 
   if radios.length > 0
     Spree.showVariantImages ($ '#product-variants input[type="radio"]').eq(0).attr('value')
@@ -62,29 +56,46 @@ $ ->
   ###
 
   width_field = ($ '#width')
+
+  # Following numbers are in 'cm'
+  returns_addition   = ($ '#bsc-pricing').data('returns-addition')
+  side_hems_addition = ($ '#bsc-pricing').data('side-hems-addition')
+  turnings_addition  = ($ '#bsc-pricing').data('turnings-addition')
+
+  fabric_width = ($ '#bsc-pricing').data('fabric-width')
   
-#  ($ '.doug.text').text(width_field.attr('value'))
-  ($ '.doug.text').text(radios_current)
-  
-#  setTimeout -> 
-#    ($ '.doug.text').text("dum, de, dum...") 
-#   , 1000 
-  
-  
-#  width_field.click (event) ->
-#    ($ '.doug.text').text(@value)
-#    alert "Getting close..."
+  pencil_pleat_multiple      = ($ '#bsc-pricing').data('pencil-pleat-multiple')
+  deep_pencil_pleat_multiple = ($ '#bsc-pricing').data('deep-pencil-pleat-multiple')
+  double_pleat_multiple      = ($ '#bsc-pricing').data('double-pleat-multiple')
+  triple_pleat_multiple      = ($ '#bsc-pricing').data('triple-pleat-multiple')
+  eyelet_pleat_multiple      = ($ '#bsc-pricing').data('eyelet-pleat-multiple')          
+
+  # Following numbers are in '£/m'  
+  cotton_lining   = ($ '#bsc-pricing').data('cotton-lining')
+  blackout_lining = ($ '#bsc-pricing').data('blackout-lining')
+  thermal_lining  = ($ '#bsc-pricing').data('thermal-lining')    
+
+  cotton_lining_labour   = ($ '#bsc-pricing').data('cotton-lining-labour')
+  blackout_lining_labour = ($ '#bsc-pricing').data('blackout-lining-labour')
+  thermal_lining_labour  = ($ '#bsc-pricing').data('thermal-lining-labour')    
   
   # 'jQuery' event binding in CoffeeScript
   # 8/10/13 DH: I feel I'm finally on home ground...ye haaa! :) That's only taken me 8 years since cutting the boot loader code...
   $(document).on('blur', '#width', ( ->
     width = (Number) @value
-    #width +=  Spree::Config[:returns_addition]
-    width += 12
+    width += returns_addition
     
+    current_multiple = ($ '#product-variants input[type="radio"]:checked').data('heading')
     
-#    ($ '.doug.text').text(exports.variantPrice)
-#    ($ '.doug.text').text(($ '#product-variants input[type="radio"]:checked').attr('data-price'))    
-    ($ '.doug.text').text(width)
+    hyphened_heading = current_multiple.replace(/\ /g, '-')
+    hyphened_heading += "-multiple"
+    
+    current_multiple_val = ($ '#bsc-pricing').data(hyphened_heading)
+    
+#    ($ '.doug.text').text(($ '#product-variants input[type="radio"]:checked').attr('data-price')) 
+#    ($ '.doug.text').text(($ '#product-variants input[type="radio"]:checked').data('price'))    
+
+    ($ '.doug.text').text(current_multiple_val)
+
   ))
   
