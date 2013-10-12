@@ -10,6 +10,8 @@ triple_pleat_multiple: Spree::Config[:triple_pleat_multiple],
 eyelet_pleat_multiple: Spree::Config[:eyelet_pleat_multiple],
 
 fabric_width: Spree::Config[:fabric_width] } do %>
+<%# --- This 'ActionView::Helper' version uses a 'data' hash that auto converts objects to JSON representation. --- %>
+<%# --- Useful, but expects an HTML content block that we don't want for just storing the pricing params! --- %>
 <% end %>
 
 <div data-hook="product_show" itemscope itemtype="http://schema.org/Product">
@@ -86,6 +88,8 @@ OK, so let's get skeletal...
       <h5 class="product-section-title">Curtain width</h5>
       <%= number_field_tag 'width', nil, :id => 'width' %>
 
+      <h5 class="product-section-title">Curtain drop</h5>
+      <%= number_field_tag 'drop', nil, :id => 'drop' %>
       
       
       <%# --- Variants --- %>

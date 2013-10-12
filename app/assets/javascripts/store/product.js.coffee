@@ -1,4 +1,4 @@
-# jQuery ->
+# "$ ->" same as "jQuery ->" since CoffeeScript using jQuery...you beauty...feel the Javascript leverage
 $ ->
   exports = this
   
@@ -81,6 +81,9 @@ $ ->
   thermal_lining_labour  = ($ '#bsc-pricing').data('thermal-lining-labour')   
   # ----------------------------------------------------------------------------------------------------------------------------- 
   
+  # This value will be assigned when the 'width' field is assigned (so needs to be declared above the function definition)
+  number_of_widths = 0
+  
   # 'jQuery' event binding in CoffeeScript
   # 8/10/13 DH: I feel I'm finally on home ground...ye haaa! :) That's only taken me 8 years since cutting the boot loader code...
   $(document).on('blur', '#width', ( ->
@@ -89,12 +92,23 @@ $ ->
     
     multiple = Spree.getCurrentMultiple()
     required_width = width * multiple
+    required_width += side_hems_addition
+    # We always need to round up, NOT TO NEAREST INT, so 2.1 needs to be 3 not 2!
+    number_of_widths = Math.ceil(required_width / fabric_width)
         
 #    ($ '.doug.text').text(($ '#product-variants input[type="radio"]:checked').attr('data-price')) 
 #    ($ '.doug.text').text(($ '#product-variants input[type="radio"]:checked').data('price'))    
 
-    ($ '.doug.text').text(required_width)
+    ($ '.doug.text').text(number_of_widths)
 
   ))
   
   
+  $(document).on('blur', '#drop', ( ->
+    drop = (Number) @value
+    cutting_len = drop + turnings_addition
+    required_fabric = cutting_len * number_of_widths
+
+    ($ '.doug.text').text(required_fabric)
+
+  ))
