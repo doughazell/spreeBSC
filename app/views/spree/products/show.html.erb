@@ -101,6 +101,7 @@ OK, so let's get skeletal...
               <li>
                 <%= radio_button_tag "products[#{@product.id}]", variant.id, index == 0, 'data-price' => variant.price_in(current_currency).display_price, 'data-heading' => variant.option_value("heading").downcase %>
                 <label for="<%= ['products', @product.id, variant.id].join('_') %>">
+                  <img src="/assets/store/pleats/<%= variant.option_value("heading").downcase %>.jpg" />
                   <span class="variant-description">
                     <%= variant_options variant %>
                   </span>
