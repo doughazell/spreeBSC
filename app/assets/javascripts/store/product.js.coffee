@@ -49,16 +49,16 @@ $ ->
   radios.click (event) ->
     Spree.showVariantImages @value
     Spree.updateVariantPrice ($ this)
-    ($ '.doug.text').text(Spree.getCurrentMultiple)
+    ($ '#price-text').text(Spree.getCurrentMultiple)
     
   ###
   --- BSC dynamic pricing ---
   ###
 
   Spree.getCurrentMultiple = ->
-    current_multiple = ($ '#product-variants input[type="radio"]:checked').data('heading')
+    current_heading = ($ '#product-variants input[type="radio"]:checked').data('heading')
     
-    hyphened_heading = current_multiple.replace(/\ /g, '-')
+    hyphened_heading = current_heading.replace(/\ /g, '-')
     hyphened_heading += "-multiple"
     # Implicit return of last value
     current_multiple_val = ($ '#bsc-pricing').data(hyphened_heading)    
@@ -96,10 +96,10 @@ $ ->
     # We always need to round up, NOT TO NEAREST INT, so 2.1 needs to be 3 not 2!
     number_of_widths = Math.ceil(required_width / fabric_width)
         
-#    ($ '.doug.text').text(($ '#product-variants input[type="radio"]:checked').attr('data-price')) 
-#    ($ '.doug.text').text(($ '#product-variants input[type="radio"]:checked').data('price'))    
+#    ($ '#price-text').text(($ '#product-variants input[type="radio"]:checked').attr('data-price')) 
+#    ($ '#price-text').text(($ '#product-variants input[type="radio"]:checked').data('price'))    
 
-    ($ '.doug.text').text(number_of_widths)
+    ($ '#price-text').text(number_of_widths)
 
   ))
   
@@ -107,8 +107,27 @@ $ ->
   $(document).on('blur', '#drop', ( ->
     drop = (Number) @value
     cutting_len = drop + turnings_addition
-    required_fabric = cutting_len * number_of_widths
+    # Convert to meters to calc price based on "£/m"
+    required_fabric_len = cutting_len * number_of_widths / 100
 
-    ($ '.doug.text').text(required_fabric)
+    price_string = ($ '#product-variants input[type="radio"]:checked').data('price')
+    price_per_meter = price_string.replace(/£/g, ' ')
+
+    price = (Math.round(required_fabric_len * price_per_meter * 100)) / 100
+
+#    ($ '#price-text').text(jQuery.type(price_per_meter))
+
+    ($ '#price-text').text("£"+price)
 
   ))
+  
+  $(document).on('click', '#lining', ( ->
+    lining_id = @value
+    lining = ($ '#lining option:selected').data('type')
+
+    ($ '#price-text').text(lining)
+
+  ))
+  
+  
+  ($ '#price-text').text(($ '#lining option:selected').data('type'))

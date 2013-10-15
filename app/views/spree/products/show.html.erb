@@ -75,8 +75,22 @@ OK, so let's get skeletal...
   
   
   <br class="clear">
-
   
+  <%# --- Price --- %>
+  <div id="price-box">
+    <table>
+      <tr>
+        <td><h3 class="product-section-title" id="price-title">Price:</h3></td>
+        <td>
+          <span id="price-text">
+            <%= "product ID: #{@product.master.id} = #{ @product.price }"  %>
+          </span>
+        </td>
+      </tr>
+    </table>
+  </div>
+  
+  <br class="clear">
 
   <div class="columns sixteen alpha" data-hook="bsc-form-cols">
     <div class="row" data-hook="bsc-form-row">
@@ -85,12 +99,18 @@ OK, so let's get skeletal...
 
 <%= form_for :order, :url => populate_orders_path do |f| %>
 
+      <%# --- Width and Drop --- %>
       <h5 class="product-section-title">Curtain width</h5>
       <%= number_field_tag 'width', nil, :id => 'width' %>
 
       <h5 class="product-section-title">Curtain drop</h5>
       <%= number_field_tag 'drop', nil, :id => 'drop' %>
       
+      <%# --- Lining --- %>
+      <h5 class="product-section-title">Lining</h5>
+      <%= select_tag :lining, options_for_select([ ['Cotton',  1,{'data-type' => 'cotton'}], 
+                                                   ['Blackout',2,{'data-type' => 'blackout'}],
+                                                   ['Thermal', 3,{'data-type' => 'thermal'}] ], 1) %>
       
       <%# --- Variants --- %>
       <% if @product.variants_and_option_values(current_currency).any? %>
@@ -101,7 +121,9 @@ OK, so let's get skeletal...
               <li>
                 <%= radio_button_tag "products[#{@product.id}]", variant.id, index == 0, 'data-price' => variant.price_in(current_currency).display_price, 'data-heading' => variant.option_value("heading").downcase %>
                 <label for="<%= ['products', @product.id, variant.id].join('_') %>">
+
                   <img src="/assets/store/pleats/<%= variant.option_value("heading").downcase %>.jpg" />
+
                   <span class="variant-description">
                     <%= variant_options variant %>
                   </span>
@@ -128,12 +150,7 @@ OK, so let's get skeletal...
     </div>
   </div>
   
-  <br>
-  <div>
-    <span class="doug text">
-      <%= "product ID: #{@product.master.id} = #{ @product.price }"  %>
-    </span>
-  </div>
+
 
 
 </div>
