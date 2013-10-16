@@ -138,8 +138,10 @@ OK, so let's get skeletal...
       <% end%>
       
 <div class="add-to-cart">
-  <%= number_field_tag (@product.variants_and_option_values.any? ? :quantity : "variants[#{@product.master.id}]"),
-            1, :class => 'title', :min => 1, :onblur => "$('#add-to-cart-button').submit();" %>
+
+  <%= hidden_field_tag (@product.variants_and_option_values.any? ? :quantity : "variants[#{@product.master.id}]"),
+            1, :class => 'title' %>        
+
   <%= button_tag :class => 'large primary', :id => 'add-to-cart-button', :type => :submit do %>
     <%= Spree.t(:add_to_cart) %>
   <% end %>

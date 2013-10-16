@@ -1,5 +1,6 @@
-# "$ ->" same as "jQuery ->" since CoffeeScript using jQuery...you beauty...feel the Javascript leverage
+# "$ ->" same as "jQuery ->" since CoffeeScript using jQuery...you beauty...feel the Javascript leverage...
 $ ->
+  # Use this to store values in the DOM
   exports = this
   
   Spree.addImageHandlers = ->
@@ -45,23 +46,10 @@ $ ->
     Spree.updateVariantPrice radios.first()
 
   Spree.addImageHandlers()
-
-  radios.click (event) ->
-    Spree.showVariantImages @value
-    Spree.updateVariantPrice ($ this)
-    ($ '#price-text').text(Spree.getCurrentMultiple)
     
   ###
-  --- BSC dynamic pricing ---
+  =================== BSC dynamic pricing =====================
   ###
-
-  Spree.getCurrentMultiple = ->
-    current_heading = ($ '#product-variants input[type="radio"]:checked').data('heading')
-    
-    hyphened_heading = current_heading.replace(/\ /g, '-')
-    hyphened_heading += "-multiple"
-    # Implicit return of last value
-    current_multiple_val = ($ '#bsc-pricing').data(hyphened_heading)    
 
   # ------------------ Params (from initializer file) stored in web page via 'data-' attribute and used by jQuery --------------
   # Following numbers are in 'cm'
@@ -80,32 +68,32 @@ $ ->
   blackout_lining_labour = ($ '#bsc-pricing').data('blackout-lining-labour')
   thermal_lining_labour  = ($ '#bsc-pricing').data('thermal-lining-labour')   
   # ----------------------------------------------------------------------------------------------------------------------------- 
-  
-  # This value will be assigned when the 'width' field is assigned (so needs to be declared above the function definition)
+
+  # These are the values assigned when the 'width' + 'drop' fields are assigned (so needs to be declared above the function definition)
   number_of_widths = 0
-  
-  # 'jQuery' event binding in CoffeeScript
-  # 8/10/13 DH: I feel I'm finally on home ground...ye haaa! :) That's only taken me 8 years since cutting the boot loader code...
-  $(document).on('blur', '#width', ( ->
-    width = (Number) @value
+  price = 0
+
+  Spree.getCurrentMultiple = ->
+    current_heading = ($ '#product-variants input[type="radio"]:checked').data('heading')
+    
+    hyphened_heading = current_heading.replace(/\ /g, '-')
+    hyphened_heading += "-multiple"
+    # Implicit return of last value
+    current_multiple_val = ($ '#bsc-pricing').data(hyphened_heading)    
+    # ---
+
+  Spree.calcNumberOfWidths = (width) ->
     width += returns_addition
     
     multiple = Spree.getCurrentMultiple()
+    
     required_width = width * multiple
     required_width += side_hems_addition
     # We always need to round up, NOT TO NEAREST INT, so 2.1 needs to be 3 not 2!
     number_of_widths = Math.ceil(required_width / fabric_width)
-        
-#    ($ '#price-text').text(($ '#product-variants input[type="radio"]:checked').attr('data-price')) 
-#    ($ '#price-text').text(($ '#product-variants input[type="radio"]:checked').data('price'))    
-
-    ($ '#price-text').text(number_of_widths)
-
-  ))
+    # ---
   
-  
-  $(document).on('blur', '#drop', ( ->
-    drop = (Number) @value
+  Spree.calcPrice = (drop) ->
     cutting_len = drop + turnings_addition
     # Convert to meters to calc price based on "£/m"
     required_fabric_len = cutting_len * number_of_widths / 100
@@ -114,20 +102,57 @@ $ ->
     price_per_meter = price_string.replace(/£/g, ' ')
 
     price = (Math.round(required_fabric_len * price_per_meter * 100)) / 100
+    # ---
+    
+  # 'jQuery' event binding in CoffeeScript
+  # 8/10/13 DH: I feel I'm finally on home ground...ye haaa! :) That's only taken me 8 years since cutting the boot loader code...
 
-#    ($ '#price-text').text(jQuery.type(price_per_meter))
-
-    ($ '#price-text').text("£"+price)
-
+  # ------------------ Width ------------------
+  $(document).on('blur', '#width', ( ->
+    width = (Number) @value
+    Spree.calcNumberOfWidths (width)
+    
+    ($ '#price-text').text(number_of_widths)
   ))
+  # ---
   
+  # ----------------- Drop ------------------  
+  $(document).on('blur', '#drop', ( ->
+    drop = (Number) @value
+    Spree.calcPrice (drop)
+
+    ($ '#price-text').text("£" + price)
+  ))
+  # ---
+
+  # ----------------- Lining ------------------    
   $(document).on('click', '#lining', ( ->
     lining_id = @value
     lining = ($ '#lining option:selected').data('type')
 
     ($ '#price-text').text(lining)
-
   ))
+  # ---
+
+  # ----------------- Heading ------------------      
+  radios.click (event) ->
+    # ----- Orig Spree product display -----
+    Spree.showVariantImages @value
+    Spree.updateVariantPrice ($ this)
+    # --------------------------------------
+    
+    width = (Number) ($ '#width').val()
+    drop  = (Number) ($ '#drop').val()
+    Spree.calcNumberOfWidths ( width )
+    Spree.calcPrice ( drop )
+    
+    ($ '#price-text').text("£" + price)
+    # ---
+
   
-  
+  # ----------------- On-load ------------------    
   ($ '#price-text').text(($ '#lining option:selected').data('type'))
+  
+#    ($ '#price-text').text(jQuery.type(price_per_meter))
+#    ($ '#price-text').text(($ '#product-variants input[type="radio"]:checked').attr('data-price')) 
+#    ($ '#price-text').text(($ '#product-variants input[type="radio"]:checked').data('price'))    
