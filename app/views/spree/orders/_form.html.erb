@@ -13,6 +13,7 @@
   <tbody id="line_items" data-hook>
     
     <%= order_form.fields_for :line_items do |item_form| %>
+      <%= __FILE__ + " - "%>
       <%= item_form %> <br>
       
       <tr class="<%= cycle('', 'alt') %> line-item">

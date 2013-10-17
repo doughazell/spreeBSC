@@ -10,8 +10,10 @@ triple_pleat_multiple: Spree::Config[:triple_pleat_multiple],
 eyelet_pleat_multiple: Spree::Config[:eyelet_pleat_multiple],
 
 fabric_width: Spree::Config[:fabric_width] } do %>
+
 <%# --- This 'ActionView::Helper' version uses a 'data' hash that auto converts objects to JSON representation. --- %>
 <%# --- Useful, but expects an HTML content block that we don't want for just storing the pricing params! --- %>
+
 <% end %>
 
 <div data-hook="product_show" itemscope itemtype="http://schema.org/Product">
@@ -139,8 +141,8 @@ OK, so let's get skeletal...
       
 <div class="add-to-cart">
 
-  <%= hidden_field_tag (@product.variants_and_option_values.any? ? :quantity : "variants[#{@product.master.id}]"),
-            1, :class => 'title' %>        
+  <%= hidden_field_tag (@product.variants_and_option_values.any? ? :quantity : "variants[#{@product.master.id}]"), 1 %>
+  <%= hidden_field_tag :price, 49 %>
 
   <%= button_tag :class => 'large primary', :id => 'add-to-cart-button', :type => :submit do %>
     <%= Spree.t(:add_to_cart) %>

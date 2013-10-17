@@ -149,6 +149,14 @@ $ ->
     ($ '#price-text').text("£" + price)
     # ---
 
+  # ----------------- Submit ------------------    
+  $(document).on('click', '#add-to-cart-button', ( ->
+    # Send the dynamic price back to the server via '#price' <input> tag to the <form>
+    ($ '#price').val(price)
+    ($ '#price-text').text("Submit")
+  ))
+  # ---
+
   
   # ----------------- On-load ------------------    
   ($ '#price-text').text(($ '#lining option:selected').data('type'))
