@@ -29,8 +29,6 @@ module Spree
 
     def add_to_line_item(line_item, variant, quantity, currency=nil, shipment=nil)
 
-debugger
-
       if line_item
         line_item.target_shipment = shipment
         line_item.quantity += quantity.to_i

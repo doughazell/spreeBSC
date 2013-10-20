@@ -44,5 +44,5 @@ gem 'spree_auth_devise', :git => 'https://github.com/spree/spree_auth_devise.git
 
 gem 'spree_ajax_add_to_cart', '2.0.0'
 
-gem 'spree_blue_theme', :git => 'git://github.com/knservis/spree_blue_theme.git'
+#gem 'spree_blue_theme', :git => 'git://github.com/knservis/spree_blue_theme.git'
 

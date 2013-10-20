@@ -1,10 +1,4 @@
 GIT
-  remote: git://github.com/knservis/spree_blue_theme.git
-  revision: eb8350adcc065e5e088fcc840af821c517a7fb51
-  specs:
-    spree_blue_theme (0.2.0)
-
-GIT
   remote: https://github.com/spree/spree_auth_devise.git
   revision: 3a1aa02e73d3f6bcbb834a47366c41f6e5ca1049
   branch: 2-0-stable
@@ -300,6 +294,5 @@ DEPENDENCIES
   spree (= 2.0.4)
   spree_ajax_add_to_cart (= 2.0.0)
   spree_auth_devise!
-  spree_blue_theme!
   spree_gateway!
   uglifier (>= 1.0.3)

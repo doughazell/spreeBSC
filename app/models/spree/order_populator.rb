@@ -18,13 +18,13 @@ module Spree
     # * Multiple products at once
     # +:products => { product_id => variant_id, product_id => variant_id }, :quantity => quantity+
     def populate(from_hash)
-# 17/10/13 DH: Seeing how we can add the custom BSC pricing to the cart
-debugger
       
       # 17/10/13 DH: Store the dynamic BSC price for addition at 'OrderContents.add_to_line_item()' stage.
       if from_hash[:price]
         @order.contents.bscDynamicPrice = BigDecimal.new(from_hash[:price])
       end
+    
+debugger
     
       from_hash[:products].each do |product_id,variant_id|
       

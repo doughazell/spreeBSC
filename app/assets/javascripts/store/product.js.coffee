@@ -71,11 +71,13 @@ $ ->
 
   # These are the values assigned when the 'width' + 'drop' fields are assigned (so needs to be declared above the function definition)
   number_of_widths = 0
+  required_fabric_len = 0
   price = 0
 
   Spree.getCurrentMultiple = ->
     current_heading = ($ '#product-variants input[type="radio"]:checked').data('heading')
     
+    # Replace the whitespace between the heading words, in the variant list, with hyphens, in order to access the stored data
     hyphened_heading = current_heading.replace(/\ /g, '-')
     hyphened_heading += "-multiple"
     # Implicit return of last value
@@ -99,13 +101,25 @@ $ ->
     required_fabric_len = cutting_len * number_of_widths / 100
 
     price_string = ($ '#product-variants input[type="radio"]:checked').data('price')
+    # Remove the preceding '£' sign
     price_per_meter = price_string.replace(/£/g, ' ')
 
+    # Multiply by 100 to convert to pence, round to nearest penny, then convert back to pounds by dividing by 100, simples...
     price = (Math.round(required_fabric_len * price_per_meter * 100)) / 100
     # ---
     
-  # 'jQuery' event binding in CoffeeScript
-  # 8/10/13 DH: I feel I'm finally on home ground...ye haaa! :) That's only taken me 8 years since cutting the boot loader code...
+  # ========================================= 'jQuery' DOM event binding in CoffeeScript ========================================
+  #                                          |------------------------------------------|
+  #                                              (A little bit of ASCII-art for you)
+  #                                                   Apparantly autistic people, 
+  #                                                     like to line things up.
+  #
+  #                                                     "Welcome to the Matrix"
+  #                                           The mental projection of your digital self.
+  #
+  #                                                               :-)
+  #
+  # 8/10/13 DH: I feel I'm finally on home ground...ye haaa! :) That's only taken me 8 years since cutting the bootloader code...
 
   # ------------------ Width ------------------
   $(document).on('blur', '#width', ( ->

@@ -51,9 +51,6 @@ module Spree
     def populate
       populator = Spree::OrderPopulator.new(current_order(true), current_currency)
 
-# 17/10/13 DH: Seeing how we can add the custom BSC pricing to the cart
-debugger
-
       # 17/10/13 DH: Added 'price' to be later added to 'variant'
       if populator.populate(params.slice(:products, :variants, :quantity, :price))
         current_order.create_proposed_shipments if current_order.shipments.any?
