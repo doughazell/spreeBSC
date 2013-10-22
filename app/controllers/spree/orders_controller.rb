@@ -68,12 +68,13 @@ module Spree
 
     # 20/10/13 DH: Creating a method to can be called on the return from Romancart to indicate a completed order
     def completed
-
       params.merge!(:checkout_complete => "true")
       if @order = current_order
         @order.state = "complete"
+        @order.completed_at = Time.now
+        @order.email = "customer@example.com"
+        @order.save! 
       end
-      #redirect_to spree.cart_path
     end
 
     def empty

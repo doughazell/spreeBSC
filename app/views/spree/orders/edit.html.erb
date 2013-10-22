@@ -59,8 +59,9 @@
         <% end %>
 <%
 =end %>        
+        <%# ---------------------------------- %>        
 
-        <%= link_to "complete order", main_app.cart_completed_path, :class => 'button gray', :method => :put %>
+        <%= link_to "complete order", main_app.cart_completed_path, :class => 'button gray', :method => :put, :remote => true %>
         
       </p>
     <% end %>

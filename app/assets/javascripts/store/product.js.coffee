@@ -85,6 +85,21 @@ $ ->
     required_width += side_hems_addition
     # We always need to round up, NOT TO NEAREST INT, so 2.1 needs to be 3 not 2!
     number_of_widths = Math.ceil(required_width / fabric_width)
+    
+    ($ '#price-text').text(number_of_widths)
+    # ---
+
+  Spree.recalcPriceOnLining = (lining) ->
+    lining_costing        = ($ '#bsc-pricing').data(lining+'-lining')
+    lining_labour_costing = ($ '#bsc-pricing').data(lining+'-lining-labour')
+    
+    lining_cost        = required_fabric_len * lining_costing
+    lining_labour_cost = required_fabric_len * lining_labour_costing
+    
+    total_price = price + lining_cost + lining_labour_cost
+    total_price = ((Math.round(total_price * 100)) / 100).toFixed(2)
+    
+    ($ '#price-text').text("£" + total_price)
     # ---
   
   Spree.calcPrice = (drop) ->
@@ -99,19 +114,9 @@ $ ->
     # Multiply by 100 to convert to pence, round to nearest penny, then convert back to pounds by dividing by 100, simples...
     price = (Math.round(required_fabric_len * price_per_meter * 100)) / 100
     total_price = price
-    # ---
     
-  Spree.recalcPriceOnLining = (lining) ->
-    lining_costing        = ($ '#bsc-pricing').data(lining+'-lining')
-    lining_labour_costing = ($ '#bsc-pricing').data(lining+'-lining-labour')
-    
-    lining_cost        = required_fabric_len * lining_costing
-    lining_labour_cost = required_fabric_len * lining_labour_costing
-    
-    total_price = price + lining_cost + lining_labour_cost
-    total_price = ((Math.round(total_price * 100)) / 100).toFixed(2)
-    
-    ($ '#price-text').text(total_price)
+    lining = ($ '#lining option:selected').data('type')
+    Spree.recalcPriceOnLining (lining)
     # ---
     
   # ========================================= 'jQuery' DOM event binding in CoffeeScript ========================================
@@ -131,8 +136,6 @@ $ ->
   $(document).on('blur', '#width', ( ->
     width = (Number) @value
     Spree.calcNumberOfWidths (width)
-    
-    ($ '#price-text').text(number_of_widths)
   ))
   # ---
   
@@ -140,18 +143,15 @@ $ ->
   $(document).on('blur', '#drop', ( ->
     drop = (Number) @value
     Spree.calcPrice (drop)
-
-    ($ '#price-text').text("£" + price)
   ))
   # ---
 
   # ----------------- Lining ------------------    
   $(document).on('click', '#lining', ( ->
     lining_id = @value
+
     lining = ($ '#lining option:selected').data('type')
     Spree.recalcPriceOnLining (lining)
-
-    
   ))
   # ---
 
