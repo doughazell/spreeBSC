@@ -3,7 +3,8 @@ spreeBSC adaptions to Spree
 
 * gem 'spree_ajax_add_to_cart', '2.0.0'
 * 'assets/javascripts/store/product.js.coffee'
-** Retrieve **data-** values sent to page from 'views/spree/products/show.html.erb' and specified in 'config/initializers/spree_bsc.rb' 
+  
+  Retrieve **data-** values sent to page from 'views/spree/products/show.html.erb' and specified in 'config/initializers/spree_bsc.rb' 
 
 We all like making lists
 ------------------------
