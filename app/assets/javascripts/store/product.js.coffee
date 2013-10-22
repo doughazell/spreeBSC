@@ -57,22 +57,14 @@ $ ->
   side_hems_addition = ($ '#bsc-pricing').data('side-hems-addition')
   turnings_addition  = ($ '#bsc-pricing').data('turnings-addition')
 
-  fabric_width = ($ '#bsc-pricing').data('fabric-width')
-
-  # Following numbers are in '£/m'  
-  cotton_lining   = ($ '#bsc-pricing').data('cotton-lining')
-  blackout_lining = ($ '#bsc-pricing').data('blackout-lining')
-  thermal_lining  = ($ '#bsc-pricing').data('thermal-lining')    
-
-  cotton_lining_labour   = ($ '#bsc-pricing').data('cotton-lining-labour')
-  blackout_lining_labour = ($ '#bsc-pricing').data('blackout-lining-labour')
-  thermal_lining_labour  = ($ '#bsc-pricing').data('thermal-lining-labour')   
+  fabric_width = ($ '#bsc-pricing').data('fabric-width')     
   # ----------------------------------------------------------------------------------------------------------------------------- 
 
   # These are the values assigned when the 'width' + 'drop' fields are assigned (so needs to be declared above the function definition)
   number_of_widths = 0
   required_fabric_len = 0
   price = 0
+  total_price = 0
 
   Spree.getCurrentMultiple = ->
     current_heading = ($ '#product-variants input[type="radio"]:checked').data('heading')
@@ -106,6 +98,20 @@ $ ->
 
     # Multiply by 100 to convert to pence, round to nearest penny, then convert back to pounds by dividing by 100, simples...
     price = (Math.round(required_fabric_len * price_per_meter * 100)) / 100
+    total_price = price
+    # ---
+    
+  Spree.recalcPriceOnLining = (lining) ->
+    lining_costing        = ($ '#bsc-pricing').data(lining+'-lining')
+    lining_labour_costing = ($ '#bsc-pricing').data(lining+'-lining-labour')
+    
+    lining_cost        = required_fabric_len * lining_costing
+    lining_labour_cost = required_fabric_len * lining_labour_costing
+    
+    total_price = price + lining_cost + lining_labour_cost
+    total_price = ((Math.round(total_price * 100)) / 100).toFixed(2)
+    
+    ($ '#price-text').text(total_price)
     # ---
     
   # ========================================= 'jQuery' DOM event binding in CoffeeScript ========================================
@@ -143,8 +149,9 @@ $ ->
   $(document).on('click', '#lining', ( ->
     lining_id = @value
     lining = ($ '#lining option:selected').data('type')
+    Spree.recalcPriceOnLining (lining)
 
-    ($ '#price-text').text(lining)
+    
   ))
   # ---
 
@@ -166,7 +173,7 @@ $ ->
   # ----------------- Submit ------------------    
   $(document).on('click', '#add-to-cart-button', ( ->
     # Send the dynamic price back to the server via '#price' <input> tag to the <form>
-    ($ '#price').val(price)
+    ($ '#price').val(total_price)
     ($ '#price-text').text("Submit")
   ))
   # ---

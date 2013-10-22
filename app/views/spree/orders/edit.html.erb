@@ -1,6 +1,6 @@
 <% @body_id = 'cart' %>
 
-<h1><%= Spree.t(:shopping_cart) %></h1>
+<h1>Review curtain specifications</h1>
 
 <% if @order.line_items.empty? %>
 
@@ -24,33 +24,32 @@
         </div>
         <%# ----------------------------------------------------------------------------- %>
         
-        <div id="subtotal" data-hook class="columns sixteen alpha omega">
-          <h5><%= Spree.t(:subtotal) %>: <span class="order-total"><%= @order.display_total.to_html %></span></h5>
-        </div>
+        
 
         <div class="links columns sixteen alpha omega" data-hook="cart_buttons">
-          <%= order_form.text_field :coupon_code, :size => 10, :placeholder => Spree.t(:coupon_code) %>
-          <%= button_tag :class => 'primary', :id => 'update-button' do %>
-            <%= Spree.t(:update) %>
-          <% end %>
+          <div id="subtotal" data-hook>
+            <h5><%= Spree.t(:subtotal) %>: <span class="order-total"><%= @order.display_total.to_html %></span></h5>
+          </div>
           <%# button_tag :class => 'button checkout primary', :id => 'checkout-link', :name => 'checkout' do %>
           <%= button_tag :class => 'button checkout primary', :id => 'romancart-link', :name => 'checkout' do %>
             
-On our way to Romancart, you beauty...
+            Proceed to Romancart
             <%# Spree.t(:checkout) %>
 
           <% end %>
         </div>
       </div>
-    <% end %>
+    <% end %> <%# END: 'form_for @order' %>
   </div>
+
+  <br class="clear">
 
   <div id="empty-cart" data-hook>
     <%= form_tag empty_cart_path, :method => :put do %>
       <p id="clear_cart_link" data-hook>
         <%= submit_tag Spree.t(:empty_cart), :class => 'button gray' %>
         <%= Spree.t(:or) %>
-        <%= link_to Spree.t(:continue_shopping), products_path, :class => 'continue button gray' %>
+        <%= link_to "complete order", main_app.cart_completed_path, :class => 'button gray', :method => :put %>
       </p>
     <% end %>
   </div>

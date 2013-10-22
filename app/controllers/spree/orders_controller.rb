@@ -66,7 +66,17 @@ module Spree
       end
     end
 
+    # 20/10/13 DH: Creating a method to can be called on the return from Romancart to indicate a completed order
+    def completed
+debugger
+      if @order = current_order
+        @order.state = "complete"
+      end
+      #redirect_to spree.cart_path
+    end
+
     def empty
+    
       if @order = current_order
         @order.empty!
       end

@@ -13,14 +13,18 @@
   <tbody id="line_items" data-hook>
     
     <%= order_form.fields_for :line_items do |item_form| %>
-      <%= __FILE__ + " - "%>
-      <%= item_form %> <br>
       
       <tr class="<%= cycle('', 'alt') %> line-item">
         <%# --- PRODUCT --- %>
         <td class="cart-item-description" data-hook="cart_item_description">
           <h4><%= link_to item_form.object.variant.product.name, product_path(item_form.object.variant.product) %></h4>
-          <%= item_form.object.variant.options_text %>
+          
+          <% item_form.object.variant.options_text.split(',').each do |option| %>
+            <%= option.gsub(/^ and/, ' ') %>
+            <br>
+          <% end %>
+          
+          <%# item_form.object.variant.options_text %>
           
           <input type=hidden name=itemname value='<%= item_form.object.variant.product.name %>'>
         </td>

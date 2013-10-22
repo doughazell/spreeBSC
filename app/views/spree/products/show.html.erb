@@ -9,7 +9,16 @@ double_pleat_multiple: Spree::Config[:double_pleat_multiple],
 triple_pleat_multiple: Spree::Config[:triple_pleat_multiple],
 eyelet_pleat_multiple: Spree::Config[:eyelet_pleat_multiple],
 
-fabric_width: Spree::Config[:fabric_width] } do %>
+fabric_width: Spree::Config[:fabric_width],
+
+cotton_lining: Spree::Config[:cotton_lining],
+blackout_lining: Spree::Config[:blackout_lining],
+thermal_lining: Spree::Config[:thermal_lining],
+
+cotton_lining_labour: Spree::Config[:cotton_lining_labour],
+blackout_lining_labour: Spree::Config[:blackout_lining_labour],
+thermal_lining_labour: Spree::Config[:thermal_lining_labour]
+} do %>
 
 <%# --- This 'ActionView::Helper' version uses a 'data' hash that auto converts objects to JSON representation. --- %>
 <%# --- Useful, but expects an HTML content block that we don't want for just storing the pricing params! --- %>
@@ -134,10 +143,10 @@ OK, so let's get skeletal...
                   <% end %>
                 </label>
               </li>
-            <% end%>
+            <% end %>
           </ul>
         </div>
-      <% end%>
+      <% end %>
       
 <div class="add-to-cart">
 

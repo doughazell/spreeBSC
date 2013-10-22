@@ -24,8 +24,6 @@ module Spree
         @order.contents.bscDynamicPrice = BigDecimal.new(from_hash[:price])
       end
     
-debugger
-    
       from_hash[:products].each do |product_id,variant_id|
       
         # 17/10/13 DH: If the hash contains a 'price' then set the variant's price
