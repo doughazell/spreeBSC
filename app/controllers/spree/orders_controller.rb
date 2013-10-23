@@ -67,6 +67,10 @@ module Spree
     end
 
     # 20/10/13 DH: Creating a method to can be called on the return from Romancart to indicate a completed order
+    #              '/config/routes.rb':- "match 'cart/completed' => 'spree/orders#completed', :via => :put"
+    #              Accessed via "<%= link_to "complete order", main_app.cart_completed_path, :method => :put, :remote => true %>"
+    #              (notice the requirement of 'main_app' before the route path, prob since using the Spree Engine!)
+    #              Since using AJAX (":remote => true") then '/views/spree/orders/completed.js.coffee' called rather than '.html.erb'
     def completed
       params.merge!(:checkout_complete => "true")
       if @order = current_order
