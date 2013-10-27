@@ -6,6 +6,12 @@ spreeBSC adaptions to Spree
 
 1. Retrieve **data-** values sent to page from 'views/spree/products/show.html.erb' and specified in 'config/initializers/spree_bsc.rb' 
 
+* ROMANCARTXML to '/cart/completed'
+
+1. Parse XML with Nokogiri
+2. Send API message with email of order
+3. Send API message to '/api/checkouts/#{@order.number}/next?token=...'
+
 We all like making lists
 ------------------------
 
