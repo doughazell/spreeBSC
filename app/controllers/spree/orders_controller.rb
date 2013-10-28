@@ -66,15 +66,48 @@ module Spree
       end
     end
 
-    # 20/10/13 DH: Creating a method to can be called on the return from Romancart to indicate a completed order
+    # 20/10/13 DH: Creating a method to be called by Romancart with 'ROMANCARTXML' to indicate a completed order
     def completed
+
+      @order = current_order
+      
+      posted_xml = params[:xml]
+
+      # Remove XHTML character encoding
+      xml = posted_xml.sub("<?xml version='1.0' encoding='UTF-8'?>", "")
+      
+      xml_doc  = Nokogiri::XML(xml)
+
+=begin
+      puts xml_doc.xpath("/romancart-transaction-data")
+      puts xml_doc.xpath("/romancart-transaction-data/sales-record-fields/email").first.content
+      puts xml_doc.xpath("/romancart-transaction-data/sales-record-fields/email").class
+=end      
+
+=begin
+      # This then causes the browser to ask whether the user wants to resend the form data.
+      #redirect_to "/api/checkouts/#{@order.number}/next?token=a05aee34ffffbac76fc642ce979c3924b148e022618c15cd" , status: :temporary_redirect
+  
+      # Copy of 'Spree::Api::CheckoutsController::next'
+      @order.next!
+      authorize! :update, @order, params[:order_token]
+      respond_with(@order, :default_template => 'spree/api/orders/show', :status => 200)
+      rescue StateMachine::InvalidTransition
+        respond_with(@order, :default_template => 'spree/api/orders/could_not_transition', :status => 422)
+=end
+
+debugger
+
       params.merge!(:checkout_complete => "true")
       if @order = current_order
         @order.state = "complete"
+        @order.payment_state = "paid"
         @order.completed_at = Time.now
-        @order.email = "customer@example.com"
+        @order.email = xml_doc.xpath("/romancart-transaction-data/sales-record-fields/email").first.content
         @order.save! 
       end
+
+
     end
 
     def empty

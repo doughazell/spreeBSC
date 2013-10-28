@@ -24,7 +24,7 @@
             <br>
           <% end %>
           
-          <%# item_form.object.variant.options_text %>
+<%# item_form.object.variant.options_text %>
           
           <input type=hidden name=itemname value='<%= item_form.object.variant.product.name %>'>
         </td>
@@ -38,10 +38,10 @@
         </td>
   
         <%# --- QUANTITY --- %>
-        <%# <td class="cart-item-quantity" data-hook="cart_item_quantity"> %>
+<%# <td class="cart-item-quantity" data-hook="cart_item_quantity"> %>
         <td class="cart-item-quantity" data-hook="cart_item_price">
                   
-          <%# item_form.number_field :quantity, :min => 0, :class => "line_item_quantity" %>
+<%# item_form.number_field :quantity, :min => 0, :class => "line_item_quantity" %>
           
           <%= item_form.object.quantity %>
           <input type=hidden name=quantity value=<%= item_form.object.quantity %>>
