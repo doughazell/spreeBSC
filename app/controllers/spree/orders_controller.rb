@@ -98,16 +98,54 @@ module Spree
 
 debugger
 
-      params.merge!(:checkout_complete => "true")
+      #params.merge!(:checkout_complete => "true")
       if @order = current_order
         @order.state = "complete"
         @order.payment_state = "paid"
         @order.completed_at = Time.now
         @order.email = xml_doc.xpath("/romancart-transaction-data/sales-record-fields/email").first.content
+        
+        @order.user_id = xml_doc.xpath("/romancart-transaction-data/orderid").first.content
+        @order.number = xml_doc.xpath("/romancart-transaction-data/orderid").first.content
+        @order.number = Time.now.to_i.to_s
+        
+        # ----------------------- Billing Address ------------------------------
+        @order.bill_address = orderAddress(xml_doc)
+        # ----------------------- Delivery Address ------------------------------        
+        #<delivery-address1/>
+        if xml_doc.xpath("/romancart-transaction-data/sales-record-fields/delivery-address1").first.content.empty?
+          @order.use_billing = true
+        else
+          @order.ship_address = orderAddress(xml_doc, "delivery-")
+        end
+        
         @order.save! 
       end
 
-
+    end
+    
+    def orderAddress(xml_doc, delivery = "")
+        rc_xml_country = xml_doc.xpath("/romancart-transaction-data/sales-record-fields/#{delivery}country").first.content
+        rc_xml_county  = xml_doc.xpath("/romancart-transaction-data/sales-record-fields/#{delivery}county").first.content
+        
+        country = Spree::Country.find_by_name(rc_xml_country.titleize)
+        if country.nil?
+          #country = Spree::Country.create
+        end
+        state = Spree::State.find_by_name(rc_xml_county.titleize)
+        
+        order_address = Spree::Address.create!(
+          :firstname => xml_doc.xpath("/romancart-transaction-data/sales-record-fields/#{delivery}first-name").first.content,
+          :lastname  => xml_doc.xpath("/romancart-transaction-data/sales-record-fields/#{delivery}last-name").first.content,
+          :address1  => xml_doc.xpath("/romancart-transaction-data/sales-record-fields/#{delivery}address1").first.content,
+          :address2  => xml_doc.xpath("/romancart-transaction-data/sales-record-fields/#{delivery}address2").first.content,
+          :city      => xml_doc.xpath("/romancart-transaction-data/sales-record-fields/#{delivery}town").first.content,
+          :state     => state,
+          :zipcode   => xml_doc.xpath("/romancart-transaction-data/sales-record-fields/#{delivery}postcode").first.content,
+          :country   => country,
+          :phone     => xml_doc.xpath("/romancart-transaction-data/sales-record-fields/#{delivery}phone").first.content
+        )
+        
     end
 
     def empty
