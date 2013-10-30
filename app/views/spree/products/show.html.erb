@@ -107,7 +107,8 @@ OK, so let's get skeletal...
     <div class="row" data-hook="bsc-form-row">
       
       <%# --- Previously ":partial => 'cart-form'" here... --- %>
-
+      
+<%# --- This gets made into AJAX form by '/app/overrides/ajax_cart_form.rb' --- %>
 <%= form_for :order, :url => populate_orders_path do |f| %>
 
       <%# --- Width and Drop --- %>
