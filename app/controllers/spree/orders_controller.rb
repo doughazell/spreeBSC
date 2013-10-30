@@ -79,22 +79,17 @@ module Spree
       
       posted_xml = params[:xml]
 
-      # Remove XHTML character encoding
+      # Remove XHTML character encoding (hopefully won't need to do this we receive XML message from RomanCart!)
       xml = posted_xml.sub("<?xml version='1.0' encoding='UTF-8'?>", "")
       
-      xml_doc  = Nokogiri::XML(xml)
+      xml_doc  = Nokogiri::XML(xml)   
 
 =begin
-      puts xml_doc.xpath("/romancart-transaction-data")
-      puts xml_doc.xpath("/romancart-transaction-data/sales-record-fields/email").first.content
-      puts xml_doc.xpath("/romancart-transaction-data/sales-record-fields/email").class
-=end      
-
-=begin
-      # This then causes the browser to ask whether the user wants to resend the form data.
-      #redirect_to "/api/checkouts/#{@order.number}/next?token=a05aee34ffffbac76fc642ce979c3924b148e022618c15cd" , status: :temporary_redirect
+      ------------------- Previous ideas to advance the order state on return from RomanCart -------------------
+      # 1) This then causes the browser to ask whether the user wants to resend the form data.
+      redirect_to "/api/checkouts/#{@order.number}/next?token=a05aee34ffffbac76fc642ce979c3924b148e022618c15cd" , status: :temporary_redirect
   
-      # Copy of 'Spree::Api::CheckoutsController::next'
+      # 2) Copy of 'Spree::Api::CheckoutsController::next'
       @order.next!
       authorize! :update, @order, params[:order_token]
       respond_with(@order, :default_template => 'spree/api/orders/show', :status => 200)
@@ -116,13 +111,13 @@ debugger
         @order.number = Time.now.to_i.to_s
         
         # ----------------------- Billing Address ------------------------------
-        @order.bill_address = orderAddress(xml_doc)
+        @order.bill_address = romancartAddress(xml_doc)
         # ----------------------- Delivery Address ------------------------------        
         #<delivery-address1/>
         if xml_doc.xpath("/romancart-transaction-data/sales-record-fields/delivery-address1").first.content.empty?
           @order.use_billing = true
         else
-          @order.ship_address = orderAddress(xml_doc, "delivery-")
+          @order.ship_address = romancartAddress(xml_doc, "delivery-")
         end
         
         @order.save! 
@@ -130,13 +125,13 @@ debugger
 
     end
     
-    def orderAddress(xml_doc, delivery = "")
+    def romancartAddress(xml_doc, delivery = "")
         rc_xml_country = xml_doc.xpath("/romancart-transaction-data/sales-record-fields/#{delivery}country").first.content
         rc_xml_county  = xml_doc.xpath("/romancart-transaction-data/sales-record-fields/#{delivery}county").first.content
         
         country = Spree::Country.find_by_name(rc_xml_country.titleize)
         if country.nil?
-          #country = Spree::Country.create
+          #country = Spree::Country.create(...)
         end
         state = Spree::State.find_by_name(rc_xml_county.titleize)
         
