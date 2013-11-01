@@ -8,40 +8,22 @@
   <h6 class="search-results-title"><%= Spree.t(:search_results, :keywords => h(params[:keywords])) %></h6>
 <% end %>
 
-<%
-=begin %>
--------------------------------------------------------------------------------------
-<%# 28/9/13 DH: Looking for "/t/categories" at the start of the request path %>
-
-<% if request.fullpath =~ /\A\/t\/categories/ %>
-<% taxon_page = true
-<% else %>
-<% taxon_page = false
-<% end %>
--------------------------------------------------------------------------------------
-<%
-=end %>
-
 <% if controller.controller_name == "home" %>
 <% home_page = true %>
 <% else %>
 <% home_page = false %>
 <% end %>
 
-<%# controller.action_name %>
-
 <% if products.any? %>
 
 <ul id="products" class="inline product-listing" data-hook>
 
   <% products.each do |product| %>
+  
     <%# --- 28/9/13 DH: Check for products with the same name as the category for the BSC home page --- %>
     <% if home_page && (home_page_li = Spree::Taxon.find_by_name(product.name)) %>
       
       <li id="product_<%= product.id %>" data-hook="products_list_item">
-        
-        <%# home_page_li_url = "/t/categories/" + product.permalink %>
-        
         <%= link_to small_image(product), seo_url(home_page_li) %>
         <%= link_to( seo_url(home_page_li), :class => 'info') do %>
         <%= product.name %>
@@ -60,28 +42,6 @@
             
     <% end %>
   <% end %>
-              
-
-<%
-=begin %> 
------------------------------------------------
-<%# (Spree::Taxon.find_by_name(product.name)) ? "Yea baby!" : "Shit happens!" %>
------------------------------------------------
-ORIGINAL PRODUCT LISTING WHICH GETS CHANGED BY THE 'SPREE_BLUE_THEME/tweak_product_list_item.rb' (NOW MOVED!!!):
-
-    <li id="product_<%= product.id %>" class="columns three <%= cycle("alpha", "secondary", "", "omega secondary", :name => "classes") %>" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
-      <div class="product-image">
-        <%= link_to small_image(product, :itemprop => "image"), product, :itemprop => 'url' %>
-      </div>
-      <%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
-      <span class="price selling" itemprop="price"><%= display_price(product) %></span>
-      
-    </li>
-  
------------------------------------------------
-<%
-=end %> 
-
 
   <% reset_cycle("classes") %>
 </ul>

@@ -86,7 +86,7 @@ $ ->
     # We always need to round up, NOT TO NEAREST INT, so 2.1 needs to be 3 not 2!
     number_of_widths = Math.ceil(required_width / fabric_width)
     
-    ($ '#price-text').text(number_of_widths)
+    #($ '#price-text').text(number_of_widths)
     # ---
 
   Spree.recalcPriceOnLining = (lining) ->
@@ -119,17 +119,20 @@ $ ->
     Spree.recalcPriceOnLining (lining)
     # ---
     
-  # ========================================= 'jQuery' DOM event binding in CoffeeScript ========================================
-  #                                          |------------------------------------------|
-  #                                              (A little bit of ASCII-art for you)
-  #                                                   Apparantly autistic people, 
-  #                                                     like to line things up.
-  #
-  #                                                     "Welcome to the Matrix"
-  #                                           The mental projection of your digital self.
-  #
-  #                                                               :-)
-  #
+  # CoffeeScript block comments are passed through to compiled Javascript (single line comments are not)
+  ###
+  ========================================= 'jQuery' DOM event binding in CoffeeScript ========================================
+                                           |------------------------------------------|
+                                                (A little bit of ASCII-art for you)
+                                                     Apparantly autistic people, 
+                                                       like to line things up.
+  
+                                                       "Welcome to the Matrix"
+                                             The mental projection of your digital self.
+  
+                                                                 :-)
+  ###
+  
   # 8/10/13 DH: I feel I'm finally on home ground...ye haaa! :) That's only taken me 8 years since cutting the bootloader code...
 
   # ------------------ Width ------------------
@@ -167,21 +170,25 @@ $ ->
     Spree.calcNumberOfWidths ( width )
     Spree.calcPrice ( drop )
     
-    ($ '#price-text').text("£" + price)
     # ---
 
   # ----------------- Submit ------------------    
   $(document).on('click', '#add-to-cart-button', ( ->
     # Send the dynamic price back to the server via '#price' <input> tag to the <form>
     ($ '#price').val(total_price)
-    ($ '#price-text').text("Submit")
   ))
   # ---
 
   
-  # ----------------- On-load ------------------    
-  ($ '#price-text').text(($ '#lining option:selected').data('type'))
+  # ----------------- On-load ------------------
+  #<% debugger %> - Needs '.erb' appended onto filename extension
+  # Current state of asset pipeline when this file compiled based on filename extension stack
+  #
+  #erbText = <% "product ID: #{@product.master.id} = #{ @product.price }"  %>
+  #erbText = "WTF???"
+  #($ '#price-text').text(erbText)
   
+# ------------------------------------ DUMP -------------------------------------
 #    ($ '#price-text').text(jQuery.type(price_per_meter))
 #    ($ '#price-text').text(($ '#product-variants input[type="radio"]:checked').attr('data-price')) 
 #    ($ '#price-text').text(($ '#product-variants input[type="radio"]:checked').data('price'))    

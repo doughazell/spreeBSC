@@ -2,12 +2,6 @@ SpreeBSC::Application.routes.draw do
   # 20/10/13 DH: Adding a order complete route after return from Romancart
   match 'cart/completed' => 'spree/orders#completed', :via => :put
   
-  # 27/10/13 DH: Trying to change HTTP verb of redirected browser from GET to PUT (as expected by Spree API)
-  #              (":to" specifies Rack application as the endpoint, old syntax using "=>")
-  #              Rails Routing Guide - "match '/application.js', to: Sprockets, via: :all", 
-  #                                    ...the router won't know the difference between the Rack application and an action.
-  #match '/api/checkouts/:id/next(.:format)', :to => 'spree/api/checkouts#next'
-
   # This line mounts Spree's routes at the root of your application.
   # This means, any requests to URLs such as /products, will go to Spree::ProductsController.
   # If you would like to change where this engine is mounted, simply change the :at option to something different.

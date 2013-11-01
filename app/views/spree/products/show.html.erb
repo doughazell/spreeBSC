@@ -28,8 +28,6 @@ thermal_lining_labour: Spree::Config[:thermal_lining_labour]
 <div data-hook="product_show" itemscope itemtype="http://schema.org/Product">
   <% @body_id = 'product-details' %>
 
-OK, so let's get skeletal...
-
   <div class="columns sixteen alpha" data-hook="product_left_part">
     <div class="row" data-hook="product_left_part_wrap">
 
@@ -94,7 +92,7 @@ OK, so let's get skeletal...
         <td><h3 class="product-section-title" id="price-title">Price:</h3></td>
         <td>
           <span id="price-text">
-            <%= "product ID: #{@product.master.id} = #{ @product.price }"  %>
+<%# "product ID: #{@product.master.id} = #{ @product.price }"  %>
           </span>
         </td>
       </tr>

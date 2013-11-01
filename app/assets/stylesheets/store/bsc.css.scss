@@ -14,7 +14,7 @@ body {
   color: $bsc_yellow;
 }
 
-
+// ----------------------- BSC Logo -------------------------
 #logo-block li {
   display: block;
   height: 25px;
@@ -24,7 +24,7 @@ body {
   font-size: 17px;
   text-transform: uppercase;
   color: white;
-  line-height: 2.5em;
+  line-height: 2.3em;
 }
 
 #logo-text {
@@ -38,6 +38,7 @@ body {
   text-transform: uppercase;
   color: white;
 }
+// -----------------------------------------------------------
 
 nav#taxonomies {
   .taxonomy-root {

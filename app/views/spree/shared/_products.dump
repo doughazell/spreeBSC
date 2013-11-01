@@ -1,0 +1,47 @@
+
+
+
+<%
+=begin %>
+-------------------------------------------------------------------------------------
+<%# 28/9/13 DH: Looking for "/t/categories" at the start of the request path %>
+
+<% if request.fullpath =~ /\A\/t\/categories/ %>
+<% taxon_page = true
+<% else %>
+<% taxon_page = false
+<% end %>
+-------------------------------------------------------------------------------------
+<%
+=end %>
+
+
+
+<%# controller.action_name %>
+
+
+
+<%# home_page_li_url = "/t/categories/" + product.permalink %>
+
+
+
+<%
+=begin %> 
+-----------------------------------------------
+<%# (Spree::Taxon.find_by_name(product.name)) ? "Yea baby!" : "Shit happens!" %>
+-----------------------------------------------
+ORIGINAL PRODUCT LISTING WHICH GETS CHANGED BY THE 'SPREE_BLUE_THEME/tweak_product_list_item.rb' (NOW MOVED!!!):
+
+    <li id="product_<%= product.id %>" class="columns three <%= cycle("alpha", "secondary", "", "omega secondary", :name => "classes") %>" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
+      <div class="product-image">
+        <%= link_to small_image(product, :itemprop => "image"), product, :itemprop => 'url' %>
+      </div>
+      <%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
+      <span class="price selling" itemprop="price"><%= display_price(product) %></span>
+      
+    </li>
+  
+-----------------------------------------------
+<%
+=end %> 
+

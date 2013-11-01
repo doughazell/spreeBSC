@@ -67,12 +67,7 @@ module Spree
     end
 
     # 20/10/13 DH: Creating a method to be called by Romancart with 'ROMANCARTXML' to indicate a completed order
-    
-    #  Old idea of using AJAX:
-    #             '/config/routes.rb':- "match 'cart/completed' => 'spree/orders#completed', :via => :put"
-    #              Accessed via "<%= link_to "complete order", main_app.cart_completed_path, :method => :put, :remote => true %>"
-    #              (notice the requirement of 'main_app' before the route path, prob since using the Spree Engine!)
-    #              Since using AJAX (":remote => true") then '/views/spree/orders/completed.js.coffee' called rather than '.html.erb'
+    #              '/config/routes.rb':- "match 'cart/completed' => 'spree/orders#completed', :via => :put"        
     def completed
 
       @order = current_order
@@ -97,17 +92,22 @@ module Spree
         respond_with(@order, :default_template => 'spree/api/orders/could_not_transition', :status => 422)
 =end
 
-debugger
-
       #params.merge!(:checkout_complete => "true")
+      
       if @order = current_order
-        @order.state = "complete"
-        @order.payment_state = "paid"
-        @order.completed_at = Time.now
+        
+        if xml_doc.xpath("/romancart-transaction-data/paid-flag").first.content.eql?("True")
+          @order.state = "complete"
+          @order.payment_state = "paid"
+          @order.completed_at = Time.now
+        end
+        
         @order.email = xml_doc.xpath("/romancart-transaction-data/sales-record-fields/email").first.content
         
         @order.user_id = xml_doc.xpath("/romancart-transaction-data/orderid").first.content
         @order.number = xml_doc.xpath("/romancart-transaction-data/orderid").first.content
+        
+        flash[:message] = "Order number taken from current time!"
         @order.number = Time.now.to_i.to_s
         
         # ----------------------- Billing Address ------------------------------
