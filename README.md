@@ -1,16 +1,35 @@
-spreeBSC adaptions to Spree
----------------------------
+# spreeBSC adaptions to Spree #
+
+### Gem additions to Spree ###
 
 * gem 'spree_ajax_add_to_cart', '2.0.0'
-* 'assets/javascripts/store/product.js.coffee':
 
-1. Retrieve **data-** values sent to page from 'views/spree/products/show.html.erb' and specified in 'config/initializers/spree_bsc.rb' 
+### Dynamic pricing parameters ###
 
-* ROMANCARTXML to '/cart/completed':
+1. Monkey-patch 'Spree::AppConfiguration' in 'config/initializers/spree_bsc.rb' to add the dynamic pricing params 
+   to the Spree config.
+
+2. Send params to browser DOM as hidden **data-** values in 'views/spree/products/show.html.erb'
+
+3. Retrieve sent values via javascript that is executed when the page loads. It is written in CoffeeScript and 
+   interfaces with the DOM via jQuery in 'assets/javascripts/store/product.js.coffee'
+
+### Curtain category tree ###
+
+If the 'views/spree/shared/products' partial view has been called from the 'home' URL controller and the 'taxon' 
+(item classification, taxonomy) has the same name as the "product" then we are selecting a curtain category.
+
+The price entered, via the '/admin' interface, for the curtain type is "0" and is not displayed.
+
+The link for the curtain types on the home page is then the taxon listing, rather than an individual curtain.
+
+Lubbly, jubbly!  Simples...
+
+### XML feedback from RomanCart ###
+
+ROMANCARTXML to '/cart/completed':
 
 1. Parse XML with Nokogiri in '/app/controllers/spree/orders_controller.rb::completed'
-2. Send API message with email of order
-3. Send API message to '/api/checkouts/#{@order.number}/next?token=...'
 
 We all like making lists
 ------------------------
