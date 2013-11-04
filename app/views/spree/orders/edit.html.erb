@@ -54,17 +54,11 @@
       <%= submit_tag "ROMANCARTXML to '#{main_app.cart_completed_path}'", :class => 'button gray' %>
       <%= hidden_field_tag "checkout_complete", "true" %>
       
-      <% file = IO.read("romancart-delivery-address.xml") %>
-      <%# file = IO.read("romancart.xml") %>
+      <%# file = IO.read("romancart-delivery-address.xml") %>
+      <% file = IO.read("romancart.xml") %>
       <%= hidden_field_tag "xml", file %>
     <% end %>
-    
-    <br class="clear">
-    
-    <span id="api-response">
-      <%= "API response for #{@order.number}"  %>
-    </span>
-    
+        
   </div>
 
 <% end %> <%# END: 'if @order.line_items.empty?' %>
