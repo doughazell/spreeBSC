@@ -2,9 +2,15 @@ spreeBSC adaptions to Spree
 ---------------------------
 
 * gem 'spree_ajax_add_to_cart', '2.0.0'
-* 'assets/javascripts/store/product.js.coffee'
-  
-  Retrieve **data-** values sent to page from 'views/spree/products/show.html.erb' and specified in 'config/initializers/spree_bsc.rb' 
+* 'assets/javascripts/store/product.js.coffee':
+
+1. Retrieve **data-** values sent to page from 'views/spree/products/show.html.erb' and specified in 'config/initializers/spree_bsc.rb' 
+
+* ROMANCARTXML to '/cart/completed':
+
+1. Parse XML with Nokogiri in '/app/controllers/spree/orders_controller.rb::completed'
+2. Send API message with email of order
+3. Send API message to '/api/checkouts/#{@order.number}/next?token=...'
 
 We all like making lists
 ------------------------
