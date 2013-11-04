@@ -1,10 +1,31 @@
-spreeBSC adaptions to Spree
----------------------------
+# spreeBSC adaptions to Spree #
+
+### Gem additions to Spree ###
 
 * gem 'spree_ajax_add_to_cart', '2.0.0'
-* 'assets/javascripts/store/product.js.coffee'
-  
-  Retrieve **data-** values sent to page from 'views/spree/products/show.html.erb' and specified in 'config/initializers/spree_bsc.rb' 
+
+### Dynamic pricing parameters ###
+
+Monkey-patch 'Spree::AppConfiguration' in 'config/initializers/spree_bsc.rb' to add the dynamic pricing params 
+to the Spree config.
+
+Send params to browser as hidden **data-** values in 'views/spree/products/show.html.erb'
+
+Retrieve values in javascript that is executed when the page loads and written in CoffeeScript and interfaces 
+with the DOM via jQuery in 'assets/javascripts/store/product.js.coffee'
+
+### Curtain category tree ###
+
+If the 'views/spree/shared/products' partial view has been called from the 'home' URL controller and the 'taxon' 
+(item classification, taxonomy) has the same name as the "product" then we are selecting a curtain category.
+
+The price entered on the '/admin' for the curtain type is "0" and is not displayed.
+
+Lubbly, jubbly!  Simples...
+
+### XML feedback from RomanCart ###
+
+
 
 We all like making lists
 ------------------------
