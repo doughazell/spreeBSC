@@ -21,6 +21,8 @@ If the 'views/spree/shared/products' partial view has been called from the 'home
 
 The price entered, via the '/admin' interface, for the curtain type is "0" and is not displayed.
 
+The link for the curtain types on the home page is then the taxon listing, rather than an individual curtain.
+
 Lubbly, jubbly!  Simples...
 
 ### XML feedback from RomanCart ###
