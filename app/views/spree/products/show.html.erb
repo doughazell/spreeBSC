@@ -149,7 +149,10 @@ thermal_lining_labour: Spree::Config[:thermal_lining_labour]
       
 <div class="add-to-cart">
 
+  <%# --- Quantity of product or variant --- %>
   <%= hidden_field_tag (@product.variants_and_option_values.any? ? :quantity : "variants[#{@product.master.id}]"), 1 %>
+  
+  <%# --- Dynamic price --- %>
   <%= hidden_field_tag :price, 49 %>
 
   <%= button_tag :class => 'large primary', :id => 'add-to-cart-button', :type => :submit do %>

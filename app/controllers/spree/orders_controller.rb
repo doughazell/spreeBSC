@@ -96,17 +96,11 @@ module Spree
       
       if @order = current_order
         
-        if xml_doc.xpath("/romancart-transaction-data/paid-flag").first.content.eql?("True")
-          @order.state = "complete"
-          @order.payment_state = "paid"
-          @order.completed_at = Time.now
-        end
-        
         @order.email = xml_doc.xpath("/romancart-transaction-data/sales-record-fields/email").first.content
         
         @order.user_id = xml_doc.xpath("/romancart-transaction-data/orderid").first.content
-        @order.number = xml_doc.xpath("/romancart-transaction-data/orderid").first.content
         
+        @order.number = xml_doc.xpath("/romancart-transaction-data/orderid").first.content        
         flash[:message] = "Order number taken from current time!"
         @order.number = Time.now.to_i.to_s
         
@@ -120,7 +114,34 @@ module Spree
           @order.ship_address = romancartAddress(xml_doc, "delivery-")
         end
         
-        @order.save! 
+        # Spree StateMachine = 1)cart -> 2)address -> 3)deliver -> 4)payment -> 5)confirm -> 6)complete
+
+        while @order.state != "payment"
+          @order.next!
+        end
+
+        if xml_doc.xpath("/romancart-transaction-data/paid-flag").first.content.eql?("True")
+          unless @order.payments.exists?
+            @order.payments.create!(:amount => @order.total)
+            @order.payments.last.payment_method = Spree::PaymentMethod.find_by_name("RomanCart")
+          end
+          
+          # '@order.payments' is an array so need to get last one entered to access 'Spree::Payment' methods
+          @order.payments.last.complete
+          
+          @order.payment_total = @order.total
+
+          # To 6 - Complete
+          @order.state = "complete"
+          @order.completed_at = Time.now
+           
+          @order.save!
+        end
+
+        # -------------------------------------------------------------        
+        #@order.shipments.create!
+        #@order.shipments.last.stock_location.name = "default"
+        
       end
 
     end
