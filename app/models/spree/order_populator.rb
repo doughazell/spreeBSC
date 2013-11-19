@@ -18,12 +18,12 @@ module Spree
     # * Multiple products at once
     # +:products => { product_id => variant_id, product_id => variant_id }, :quantity => quantity+
     def populate(from_hash)
-      
+
       # 17/10/13 DH: Store the dynamic BSC price for addition at 'OrderContents.add_to_line_item()' stage.
       if from_hash[:price]
         @order.contents.bscDynamicPrice = BigDecimal.new(from_hash[:price])
       end
-    
+          
       from_hash[:products].each do |product_id,variant_id|
       
         # 17/10/13 DH: If the hash contains a 'price' then set the variant's price
@@ -39,6 +39,15 @@ module Spree
       
         attempt_cart_add(variant_id, quantity)
       end if from_hash[:variants]
+
+      # 18/11/13 DH: Store the curtains spec in the 'Order.special_instructions'
+      #              Needs to be stored after 'attempt_cart_add' otherwise gets deleted for a new order.
+      if from_hash[:spec]
+        @order.special_instructions = from_hash[:spec]
+        # If the order isn't saved here then we loose the curtains spec (since 'special instructions' is normally used for 
+        # delivery info and doesn't get saved at this stage in the normal Spree Checkout state transition process)
+        @order.save!
+      end
 
       valid?
     end

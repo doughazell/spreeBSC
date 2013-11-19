@@ -2,7 +2,7 @@
 <romancart-transaction-data>
 <orderid>1934945</orderid>
 <passthru></passthru>
-<paid-flag>False</paid-flag>
+<paid-flag>True</paid-flag>
 <sales-record-fields>
 <company-name></company-name>
 <title>Mr</title>

@@ -52,9 +52,10 @@ module Spree
       populator = Spree::OrderPopulator.new(current_order(true), current_currency)
 
       # 17/10/13 DH: Added 'price' to be later added to 'variant'
-      if populator.populate(params.slice(:products, :variants, :quantity, :price))
+      # 18/11/13 DH: Added 'spec' to be later added to the Order Special Instructions for curtain details.
+      if populator.populate(params.slice(:products, :variants, :quantity, :price, :spec))
         current_order.create_proposed_shipments if current_order.shipments.any?
-
+debugger
         fire_event('spree.cart.add')
         fire_event('spree.order.contents_changed')
         respond_with(@order) do |format|
@@ -115,12 +116,13 @@ module Spree
         end
         
         # Spree StateMachine = 1)cart -> 2)address -> 3)deliver -> 4)payment -> 5)confirm -> 6)complete
-
+debugger
         while @order.state != "payment"
           @order.next!
         end
 
         if xml_doc.xpath("/romancart-transaction-data/paid-flag").first.content.eql?("True")
+
           unless @order.payments.exists?
             @order.payments.create!(:amount => @order.total)
             @order.payments.last.payment_method = Spree::PaymentMethod.find_by_name("RomanCart")

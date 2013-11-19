@@ -62,13 +62,7 @@ thermal_lining_labour: Spree::Config[:thermal_lining_labour]
           <%= product_description(@product) rescue Spree.t(:product_has_no_description) %>
         </div>
 
-<%
-=begin %>
-        <div id="cart-form" data-hook="cart_form">
-          <%= render :partial => 'cart_form' %>
-        </div>
-<%
-=end %>
+
 
       </div>
 
@@ -104,7 +98,16 @@ thermal_lining_labour: Spree::Config[:thermal_lining_labour]
   <div class="columns sixteen alpha" data-hook="bsc-form-cols">
     <div class="row" data-hook="bsc-form-row">
       
-      <%# --- Previously ":partial => 'cart-form'" here... --- %>
+<%
+=begin %>
+<%# --- Previously ":partial => 'cart-form'" here... --- %>
+----------------------------------------------------------------
+        <div id="cart-form" data-hook="cart_form">
+          <%= render :partial => 'cart_form' %>
+        </div>
+----------------------------------------------------------------
+<%
+=end %>
       
 <%# --- This gets made into AJAX form by '/app/overrides/ajax_cart_form.rb' --- %>
 <%= form_for :order, :url => populate_orders_path do |f| %>
@@ -154,6 +157,9 @@ thermal_lining_labour: Spree::Config[:thermal_lining_labour]
   
   <%# --- Dynamic price --- %>
   <%= hidden_field_tag :price, 49 %>
+  
+  <%# --- Required curtain spec --- %>
+  <%= hidden_field_tag :spec, "N/A" %>
 
   <%= button_tag :class => 'large primary', :id => 'add-to-cart-button', :type => :submit do %>
     <%= Spree.t(:add_to_cart) %>

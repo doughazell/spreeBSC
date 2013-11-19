@@ -28,6 +28,9 @@ Spree::AppConfiguration.class_eval do
   
 end
 
+# These values get automatically put into the 'spree_preferences' table in the DB on startup...nice!
+# (along with those from 'spree.rb' and the '/admin' interface)
+
 Spree::Config[:pencil_pleat_multiple]      = 2.5
 Spree::Config[:deep_pencil_pleat_multiple] = 2.5
 Spree::Config[:double_pleat_multiple]      = 2.75

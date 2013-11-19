@@ -60,6 +60,12 @@ $ ->
   fabric_width = ($ '#bsc-pricing').data('fabric-width')     
   # ----------------------------------------------------------------------------------------------------------------------------- 
 
+  # Orig user specified values
+  curtain_width = 0
+  curtain_drop  = 0
+  lining          = ""
+  current_heading = ""
+
   # These are the values assigned when the 'width' + 'drop' fields are assigned (so needs to be declared above the function definition)
   number_of_widths = 0
   required_fabric_len = 0
@@ -137,14 +143,14 @@ $ ->
 
   # ------------------ Width ------------------
   $(document).on('blur', '#width', ( ->
-    width = (Number) @value
+    curtain_width = width = (Number) @value
     Spree.calcNumberOfWidths (width)
   ))
   # ---
   
   # ----------------- Drop ------------------  
   $(document).on('blur', '#drop', ( ->
-    drop = (Number) @value
+    curtain_drop = drop = (Number) @value
     Spree.calcPrice (drop)
   ))
   # ---
@@ -176,13 +182,16 @@ $ ->
   $(document).on('click', '#add-to-cart-button', ( ->
     # Send the dynamic price back to the server via '#price' <input> tag to the <form>
     ($ '#price').val(total_price)
+    
+    spec = "width=" + curtain_width + ",drop=" + curtain_drop + ",lining=" + lining + ",heading=" + current_heading
+    ($ '#spec').val(spec)
   ))
   # ---
 
   
   # ----------------- On-load ------------------
   #<% debugger %> - Needs '.erb' appended onto filename extension
-  # Current state of asset pipeline when this file compiled based on filename extension stack
+  # Gets current state of asset pipeline when this file is compiled (which is based on filename extension stack)
   #
   #erbText = <% "product ID: #{@product.master.id} = #{ @product.price }"  %>
   #erbText = "WTF???"
