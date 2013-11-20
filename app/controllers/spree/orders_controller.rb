@@ -55,7 +55,7 @@ module Spree
       # 18/11/13 DH: Added 'spec' to be later added to the Order Special Instructions for curtain details.
       if populator.populate(params.slice(:products, :variants, :quantity, :price, :spec))
         current_order.create_proposed_shipments if current_order.shipments.any?
-debugger
+
         fire_event('spree.cart.add')
         fire_event('spree.order.contents_changed')
         respond_with(@order) do |format|
@@ -116,7 +116,7 @@ debugger
         end
         
         # Spree StateMachine = 1)cart -> 2)address -> 3)deliver -> 4)payment -> 5)confirm -> 6)complete
-debugger
+#debugger
         while @order.state != "payment"
           @order.next!
         end

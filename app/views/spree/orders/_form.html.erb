@@ -1,67 +1,45 @@
 <input type=hidden name=storeid value=61379>
 
 <table id="cart-detail" data-hook>
-  <thead>
-    <tr data-hook="cart_items_headers">
-      <th class="cart-item-description-header"><%= Spree.t(:item) %></th>
-      <th class="cart-item-price-header"><%= Spree.t(:price) %></th>
-      <th class="cart-item-quantity-header"><%= Spree.t(:qty) %></th>
-      <th class="cart-item-total-header"><%= Spree.t(:total) %></th>
-    </tr>
-  </thead>
-  
   <tbody id="line_items" data-hook>
-    
     <%= order_form.fields_for :line_items do |item_form| %>
-      
+
+<%# debugger %>
+
       <tr class="<%= cycle('', 'alt') %> line-item">
-        <%# --- PRODUCT --- %>
         <td class="cart-item-description" data-hook="cart_item_description">
           <h4><%= link_to item_form.object.variant.product.name, product_path(item_form.object.variant.product) %></h4>
-          
-          <% item_form.object.variant.options_text.split(',').each do |option| %>
-            <%= option.gsub(/^ and/, ' ') %>
-            <br>
-          <% end %>
-          
-          <img src="/assets/store/pleats/<%= item_form.object.variant.option_value("heading").downcase %>.jpg" />
-          
-<%# item_form.object.variant.options_text %>
-          
-          <input type=hidden name=itemname value='<%= item_form.object.variant.product.name %>'>
-        </td>
 
-        <%# --- PRICE --- %>  
-        <td class="cart-item-price" data-hook="cart_item_price">
-          <%= item_form.object.single_money.to_html %>
-          <%# item_form.object.amount %>
+          <table id="product-properties" class="table-display" data-hook>
+            <tbody>
+            
+              <% @order.special_instructions.split(',').each do |spec| %>
+                <% category, value = spec.split('=') %>
+                
+                <tr>
+                  <td><strong><%= category.capitalize %></strong></td>
+                  <% if category == "width" || category == "drop" %>
+                    <td><%= value + " cm" %></td>
+                  <% else %>
+                    <td><%= value %></td>
+                  <% end %>
+                </tr>
+              <% end %>
           
-          <input type=hidden name=price value=<%= item_form.object.price %>>
-        </td>
-  
-        <%# --- QUANTITY --- %>
-<%# <td class="cart-item-quantity" data-hook="cart_item_quantity"> %>
-        <td class="cart-item-quantity" data-hook="cart_item_price">
+              <%= product_image(item_form.object.variant.product, :itemprop => "image") %>
+
+              <img src="/assets/store/pleats/<%= item_form.object.variant.option_value("heading").downcase %>.jpg" />
                   
-<%# item_form.number_field :quantity, :min => 0, :class => "line_item_quantity" %>
-          
-          <%= item_form.object.quantity %>
+            </tbody>
+          </table>
+          <br>
+                              
+          <input type=hidden name=itemname value='<%= item_form.object.variant.product.name %>'>
+          <input type=hidden name=price value=<%= item_form.object.price %>>
           <input type=hidden name=quantity value=<%= item_form.object.quantity %>>
-        </td>
 
-        <%# --- TOTAL --- %>
-        <td class="cart-item-total" data-hook="cart_item_total">
-          <%= item_form.object.display_amount.to_html unless item_form.object.quantity.nil? %>
-        </td>
-        
-        <%# --- DELETE OPTION --- %>
-        <%#<td class="cart-item-delete" data-hook="cart_item_delete">%>
-          <%# link_to image_tag('icons/delete.png'), '#', :class => 'delete', :id => "delete_#{dom_id(item_form.object)}" %>
-        <%#</td>%>
-          
       </tr>
       
-
     <% end %>
     
   </tbody>
