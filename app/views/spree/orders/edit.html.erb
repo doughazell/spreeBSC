@@ -28,13 +28,17 @@
           <div id="subtotal" data-hook>
             <h5><%= Spree.t(:price) %>: <span class="order-total"><%= @order.display_total.to_html %></span></h5>
           </div>
+          
           <%# button_tag :class => 'button checkout primary', :id => 'checkout-link', :name => 'checkout' do %>
           <%= button_tag :class => 'button checkout primary', :id => 'romancart-link', :name => 'checkout' do %>
-            
             Proceed to Romancart
             <%# Spree.t(:checkout) %>
-
           <% end %>
+          
+          <%= form_tag empty_cart_path, :method => :put do %>
+            <%= submit_tag Spree.t(:empty_cart), :class => 'button gray' %>
+          <% end %>
+        
         </div>
       </div>
     <% end %> <%# END: 'form_for @order' %>
@@ -42,23 +46,13 @@
 
   <br class="clear">
 
-  <div id="empty-cart" data-hook>
-  
-    <%= form_tag empty_cart_path, :method => :put do %>
-      <p id="clear_cart_link" data-hook>
-        <%= submit_tag Spree.t(:empty_cart), :class => 'button gray' %>
-      </p>
-    <% end %> <%# END: 'form_tag empty_cart_path' %>
+  <%= form_tag main_app.cart_completed_path, :method => :put do %>
+    <%= submit_tag "ROMANCARTXML to '#{main_app.cart_completed_path}'", :class => 'button gray' %>
+    <%= hidden_field_tag "checkout_complete", "true" %>
     
-    <%= form_tag main_app.cart_completed_path, :method => :put do %>
-      <%= submit_tag "ROMANCARTXML to '#{main_app.cart_completed_path}'", :class => 'button gray' %>
-      <%= hidden_field_tag "checkout_complete", "true" %>
-      
-      <% file = IO.read("romancart-delivery-address.xml") %>
-      <%# file = IO.read("romancart.xml") %>
-      <%= hidden_field_tag "xml", file %>
-    <% end %>
+    <% file = IO.read("romancart-delivery-address.xml") %>
+    <%# file = IO.read("romancart.xml") %>
+    <%= hidden_field_tag "xml", file %>
+  <% end %>
         
-  </div>
-
 <% end %> <%# END: 'if @order.line_items.empty?' %>

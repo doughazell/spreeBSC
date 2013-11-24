@@ -2,9 +2,11 @@
 
 <table id="cart-detail" data-hook>
   <tbody id="line_items" data-hook>
+    
+    <% itemnum = 0 %>
+    <% rcXnum = nil %>
+    
     <%= order_form.fields_for :line_items do |item_form| %>
-
-<%# debugger %>
 
       <tr class="line-item">
         <td class="cart-item-description" data-hook="cart_item_description">
@@ -38,14 +40,23 @@
           </table>
           <br>
           
+<%# debugger %>
+          
           <%# ----------------------------------------------------------------------------- %>
           <%# We also need to pass the spec in brackets after the curtain name (so that the %>
           <%# email sent to the user from RomanCart contains the details writing.)          %>
           <%# ----------------------------------------------------------------------------- %>
-          <input type=hidden name=itemname value='<%= item_form.object.variant.product.name + "(" + item_form.object.variant.bsc_spec + ")"  %>'>
-          <input type=hidden name=price value=<%= item_form.object.price %>>
-          <input type=hidden name=quantity value=<%= item_form.object.quantity %>>
+          
+          <% if itemnum > 0 %>
+            <% rcXnum = "X#{itemnum}" %>
+          <% end %>
+          
+          <input type=hidden name=<%= rcXnum %>itemname value='<%= item_form.object.variant.product.name + "(" + item_form.object.variant.bsc_spec + ")" %>'>
+          <input type=hidden name=<%= rcXnum %>price value=<%= item_form.object.price %>>
+          <input type=hidden name=<%= rcXnum %>quantity value=<%= item_form.object.quantity %>>
+          <input type=hidden name=<%= rcXnum %>include value=on>
 
+          <% itemnum += 1 %>
       </tr>
       
     <% end %>

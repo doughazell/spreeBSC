@@ -14,6 +14,13 @@ body {
   color: $bsc_yellow;
 }
 
+// --------------------- Layout for product + summary pages --------------------
+#content {
+  margin-left: 80px;
+  margin-top: 50px;
+  
+}
+
 // ----------------------- BSC Logo -------------------------
 #logo-block li {
   display: block;
@@ -38,7 +45,7 @@ body {
   text-transform: uppercase;
   color: white;
 }
-// -----------------------------------------------------------
+// ------------------------------ Home page  -----------------------------------
 
 nav#taxonomies {
   .taxonomy-root {
@@ -61,6 +68,7 @@ nav#taxonomies {
 Multiline coments
 */
 
+// ------------------------ Curtain dynamic pricing page -------------------------
 #price-box {
   margin-left: 750px;
   position: fixed;
@@ -92,11 +100,6 @@ Multiline coments
   margin-bottom: -3px;
 }
 
-#content {
-  margin: 30px;
-  
-}
-
 #inside-product-cart-form {
   margin-left: 7px;
 }
@@ -117,10 +120,10 @@ Multiline coments
   margin-bottom: 20px;
 }
 
-// ----------------------- Cart page ------------------------
+// ----------------------- Summary page before RomanCart ------------------------
 div#subtotal {
-  margin-top: 0px;
-  margin-right: 50px;
+  margin-top: 5px;
+  margin-right: 150px;
 }
 
 #product-properties {
@@ -128,5 +131,6 @@ div#subtotal {
     width: 350px;
   }
 }
+
 
 
