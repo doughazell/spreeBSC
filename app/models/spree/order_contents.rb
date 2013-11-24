@@ -1,6 +1,6 @@
 module Spree
   class OrderContents
-    attr_accessor :order, :currency, :bscDynamicPrice
+    attr_accessor :order, :currency, :bscDynamicPrice, :bscSpec
 
     def initialize(order)
       @order = order
@@ -33,6 +33,14 @@ module Spree
         line_item.target_shipment = shipment
         line_item.quantity += quantity.to_i
         line_item.currency = currency unless currency.nil?
+        
+        if @bscDynamicPrice
+          line_item.price            = @bscDynamicPrice
+          
+          line_item.variant.bsc_spec = @bscSpec
+          line_item.variant.save
+        end  
+        
         line_item.save
       else
         line_item = LineItem.new(quantity: quantity)
@@ -44,10 +52,13 @@ module Spree
         else
           line_item.price    = variant.price
         end
-        
+
         # 17/10/13 DH: If a dynamic price was returned from the Products Show then use it to populate the line item
         if @bscDynamicPrice
-          line_item.price = @bscDynamicPrice
+          line_item.price            = @bscDynamicPrice
+          
+          line_item.variant.bsc_spec = @bscSpec
+          line_item.variant.save
         end  
         
         order.line_items << line_item

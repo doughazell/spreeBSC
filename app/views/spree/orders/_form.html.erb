@@ -6,18 +6,22 @@
 
 <%# debugger %>
 
-      <tr class="<%= cycle('', 'alt') %> line-item">
+      <tr class="line-item">
         <td class="cart-item-description" data-hook="cart_item_description">
           <h4><%= link_to item_form.object.variant.product.name, product_path(item_form.object.variant.product) %></h4>
 
           <table id="product-properties" class="table-display" data-hook>
             <tbody>
             
-              <% @order.special_instructions.split(',').each do |spec| %>
+              <%# ----------------------------------------------------- %>
+              <%# @order.special_instructions.split(',').each do |spec| %>
+              <%# ----------------------------------------------------- %>
+              
+              <% item_form.object.variant.bsc_spec.split(',').each do |spec| %>
                 <% category, value = spec.split('=') %>
                 
                 <tr>
-                  <td><strong><%= category.capitalize %></strong></td>
+                  <td class="bsc-spec-category"><strong><%= category.capitalize %></strong></td>
                   <% if category == "width" || category == "drop" %>
                     <td><%= value + " cm" %></td>
                   <% else %>
@@ -33,8 +37,12 @@
             </tbody>
           </table>
           <br>
-                              
-          <input type=hidden name=itemname value='<%= item_form.object.variant.product.name %>'>
+          
+          <%# ----------------------------------------------------------------------------- %>
+          <%# We also need to pass the spec in brackets after the curtain name (so that the %>
+          <%# email sent to the user from RomanCart contains the details writing.)          %>
+          <%# ----------------------------------------------------------------------------- %>
+          <input type=hidden name=itemname value='<%= item_form.object.variant.product.name + "(" + item_form.object.variant.bsc_spec + ")"  %>'>
           <input type=hidden name=price value=<%= item_form.object.price %>>
           <input type=hidden name=quantity value=<%= item_form.object.quantity %>>
 

@@ -23,7 +23,13 @@ module Spree
       if from_hash[:price]
         @order.contents.bscDynamicPrice = BigDecimal.new(from_hash[:price])
       end
-          
+    
+      # 22/11/13 DH: Now storing the BSC spec in the description part of the line item (so using same transfer mechanism as 'price')
+      #              Then we can add multiple curtains to the same order.
+      if from_hash[:spec]
+        @order.contents.bscSpec = from_hash[:spec]
+      end
+                
       from_hash[:products].each do |product_id,variant_id|
       
         # 17/10/13 DH: If the hash contains a 'price' then set the variant's price
@@ -40,6 +46,7 @@ module Spree
         attempt_cart_add(variant_id, quantity)
       end if from_hash[:variants]
 
+=begin
       # 18/11/13 DH: Store the curtains spec in the 'Order.special_instructions'
       #              Needs to be stored after 'attempt_cart_add' otherwise gets deleted for a new order.
       if from_hash[:spec]
@@ -48,6 +55,7 @@ module Spree
         # delivery info and doesn't get saved at this stage in the normal Spree Checkout state transition process)
         @order.save!
       end
+=end
 
       valid?
     end
