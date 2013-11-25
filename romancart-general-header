@@ -1,13 +1,9 @@
 <style type="text/css">
-body {background: url(https://secure.romancart.com/secure/images/6480KGK61379FGFJ1.jpg) top no-repeat;background-size: 100% 300px;}
+body {background: url(https://secure.romancart.com/secure/images/6480KGK61379FGFJ1.jpg) top no-repeat;background-size: 100% 300px;} 
 #logo-block li {display: block;height: 25px;}
 #logo-header {font-size: 17px;text-transform: uppercase;color: white;line-height: 2em;}
 #logo-text {font-size: 20px;text-transform: uppercase;color: #CBCB67;}
 #logo-trailer {font-size: 11px;text-transform: uppercase;color: white;}
-.romantable tr:nth-child(2) {background: transparent url(https://secure.romancart.com/secure/images/6483KGK61379FGFJ1.png); background-size: 100%;}
-.romantable tr:nth-child(n+5) {background-color:white;}
-.romantable td:first-child {width: 700px;}
-.romantable td {width: 100px;}
-.romantable td {padding-left: 10px;padding-right: 10px;}
 </style>
 <ul id="logo-block"><li id="logo-header">The</li><li id="logo-text">Bespoke Silk Curtain Company</li><li id="logo-trailer">exceptional quality made to measure silk curtains</li></ul>
+
