@@ -36,9 +36,10 @@ module Spree
         
         if @bscDynamicPrice
           line_item.price            = @bscDynamicPrice
+          line_item.bsc_spec = @bscSpec
           
-          line_item.variant.bsc_spec = @bscSpec
-          line_item.variant.save
+          #line_item.variant.bsc_spec = @bscSpec
+          #line_item.variant.save
         end  
         
         line_item.save
@@ -55,10 +56,11 @@ module Spree
 
         # 17/10/13 DH: If a dynamic price was returned from the Products Show then use it to populate the line item
         if @bscDynamicPrice
-          line_item.price            = @bscDynamicPrice
+          line_item.price    = @bscDynamicPrice
+          line_item.bsc_spec = @bscSpec
           
-          line_item.variant.bsc_spec = @bscSpec
-          line_item.variant.save
+          #line_item.variant.bsc_spec = @bscSpec
+          #line_item.variant.save
         end  
         
         order.line_items << line_item

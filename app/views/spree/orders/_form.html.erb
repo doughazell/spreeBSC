@@ -19,7 +19,7 @@
               <%# @order.special_instructions.split(',').each do |spec| %>
               <%# ----------------------------------------------------- %>
               
-              <% item_form.object.variant.bsc_spec.split(',').each do |spec| %>
+              <% item_form.object.bsc_spec.split(',').each do |spec| %>
                 <% category, value = spec.split('=') %>
                 
                 <tr>
@@ -51,7 +51,7 @@
             <% rcXnum = "X#{itemnum}" %>
           <% end %>
           
-          <input type=hidden name=<%= rcXnum %>itemname value='<%= item_form.object.variant.product.name + " (" + item_form.object.variant.bsc_spec + ")" %>'>
+          <input type=hidden name=<%= rcXnum %>itemname value='<%= item_form.object.variant.product.name + " (" + item_form.object.bsc_spec + ")" %>'>
           <input type=hidden name=<%= rcXnum %>price value=<%= item_form.object.price %>>
           <input type=hidden name=<%= rcXnum %>quantity value=<%= item_form.object.quantity %>>
           <input type=hidden name=<%= rcXnum %>include value=on>
