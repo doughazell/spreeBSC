@@ -57,7 +57,8 @@ $ ->
   side_hems_addition = ($ '#bsc-pricing').data('side-hems-addition')
   turnings_addition  = ($ '#bsc-pricing').data('turnings-addition')
 
-  fabric_width = ($ '#bsc-pricing').data('fabric-width')     
+  fabric_width   = ($ '#bsc-pricing').data('fabric-width')
+  repeat_len = ($ '#bsc-pricing').data('pattern-repeat')     
   # ----------------------------------------------------------------------------------------------------------------------------- 
 
   # Orig user specified values
@@ -110,6 +111,25 @@ $ ->
   
   Spree.calcPrice = (drop) ->
     cutting_len = drop + turnings_addition
+    
+    # -----------------------------
+    # *** PATTERN REPEAT FABRIC ***
+    # -----------------------------
+    # If the curtain is pattern repeat (id by repeat data-attrib value not zero, set by 'views/spree/products/show.html.erb')
+    # then divide cutting_len by repeat_len and round up.
+    if repeat_len > 0
+      repeat_len_multiple = Math.ceil(cutting_len / repeat_len)
+      
+      console.log("----------------------------")
+      console.log("repeat_len:" + repeat_len)
+      console.log("repeat_len_multiple:" + repeat_len_multiple)
+      console.log("cutting_len:" + cutting_len)
+      
+      cutting_len  = repeat_len * repeat_len_multiple
+      console.log("cutting_len:" + cutting_len)
+      console.log("----------------------------")
+    # ---
+    
     # Convert to meters to calc price based on "£/m"
     required_fabric_len = cutting_len * number_of_widths / 100
 
