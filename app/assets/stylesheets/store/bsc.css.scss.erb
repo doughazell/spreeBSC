@@ -120,6 +120,22 @@ Multiline coments
   margin-bottom: 20px;
 }
 
+/*
+-----------------------------------
+-----------------------------------
+*/
+
+#page-link-to-cart.cart-indicator a {
+    text-decoration: underline;
+    color: $bsc_yellow;
+    font-size: 15px;
+    padding-top: 10px;
+    padding-right: 40px;
+    background: transparent url(<%= asset_path 'cart-empty_x32.png' %>) center right no-repeat;
+}
+
+#page-link-to-cart.cart-indicator a.full { background-image: url(<%= asset_path 'cart-full_x32.png' %>); }
+
 // ----------------------- Summary page before RomanCart ------------------------
 div#subtotal {
   margin-top: 5px;

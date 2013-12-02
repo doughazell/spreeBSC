@@ -35,13 +35,18 @@
             <%# Spree.t(:checkout) %>
           <% end %>
           
-          <%= form_tag empty_cart_path, :method => :put do %>
-            <%= submit_tag Spree.t(:empty_cart), :class => 'button gray' %>
-          <% end %>
+          <%# --- Orig place for empty_cart form --- %>
+          <%= link_to Spree.t(:empty_cart), empty_cart_path, :method => :put, :class => 'button gray' %>
+          
         
         </div>
       </div>
     <% end %> <%# END: 'form_for @order' %>
+
+
+    
+    
+    
   </div>
 
   <br class="clear">
