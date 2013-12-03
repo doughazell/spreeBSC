@@ -205,6 +205,12 @@ $ ->
     
     spec = "width=" + curtain_width + ",drop=" + curtain_drop + ",lining=" + lining + ",heading=" + current_heading
     ($ '#spec').val(spec)
+    
+    unless ($ '#cm_measurements').is(':checked')
+      alert "You need to accept that measurements are in 'cm'"
+      false
+    # --- 
+
   ))
   # ---
 

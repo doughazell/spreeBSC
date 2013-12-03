@@ -75,8 +75,6 @@ pattern_repeat: patternRepeat
           <%= product_description(@product) rescue Spree.t(:product_has_no_description) %>
         </div>
 
-
-
       </div>
 
 <%
@@ -87,8 +85,6 @@ pattern_repeat: patternRepeat
 
     </div>
   </div> <%# END - data-hook="product_right_part" %>
-  
-  
   
   <br class="clear">
   
@@ -122,70 +118,74 @@ pattern_repeat: patternRepeat
 <%
 =end %>
       
-<%# --- This gets made into AJAX form by '/app/overrides/ajax_cart_form.rb' --- %>
-<%= form_for :order, :url => populate_orders_path do |f| %>
+      <%# --- This gets made into AJAX form by '/app/overrides/ajax_cart_form.rb' --- %>
+      <%= form_for :order, :url => populate_orders_path do |f| %>
 
-      <%# --- Width and Drop --- %>
-      <h5 class="product-section-title">Curtain width</h5>
-      <%= number_field_tag 'width', nil, :id => 'width' %>
+        <%# --- Width and Drop --- %>
+        <h5 class="product-section-title">Curtain width</h5>
+        <%= number_field_tag 'width', nil, :id => 'width' %>
 
-      <h5 class="product-section-title">Curtain drop</h5>
-      <%= number_field_tag 'drop', nil, :id => 'drop' %>
+        <h5 class="product-section-title">Curtain drop</h5>
+        <%= number_field_tag 'drop', nil, :id => 'drop' %>
+        
+        <%# --- Lining --- %>
+        <h5 class="product-section-title">Lining</h5>
+        <%= select_tag :lining, options_for_select([ ['Cotton',  1,{'data-type' => 'cotton'}], 
+                                                     ['Blackout',2,{'data-type' => 'blackout'}],
+                                                     ['Thermal', 3,{'data-type' => 'thermal'}] ], 1) %>
+        
+        <%# --- Variants --- %>
+        <% if @product.variants_and_option_values(current_currency).any? %>
+          <div id="product-variants" class="columns five alpha">
+            <h5 class="product-section-title"><%= Spree.t(:variants) %></h5>
+            <ul>
+              <% @product.variants_and_option_values(current_currency).each_with_index do |variant, index| %>
+                <li>
+                  <%= radio_button_tag "products[#{@product.id}]", variant.id, index == 0, 'data-price' => variant.price_in(current_currency).display_price, 'data-heading' => variant.option_value("heading").downcase %>
+                  <label for="<%= ['products', @product.id, variant.id].join('_') %>">
+
+                    <img src="/assets/store/pleats/<%= variant.option_value("heading").downcase %>.jpg" />
+
+                    <span class="variant-description">
+                      <%= variant_options variant %>
+                    </span>
+                    <% if variant_price variant %>
+                      <span class="price diff"><%= variant_price variant %></span>
+                    <% end %>
+                  </label>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
       
-      <%# --- Lining --- %>
-      <h5 class="product-section-title">Lining</h5>
-      <%= select_tag :lining, options_for_select([ ['Cotton',  1,{'data-type' => 'cotton'}], 
-                                                   ['Blackout',2,{'data-type' => 'blackout'}],
-                                                   ['Thermal', 3,{'data-type' => 'thermal'}] ], 1) %>
-      
-      <%# --- Variants --- %>
-      <% if @product.variants_and_option_values(current_currency).any? %>
-        <div id="product-variants" class="columns five alpha">
-          <h5 class="product-section-title"><%= Spree.t(:variants) %></h5>
-          <ul>
-            <% @product.variants_and_option_values(current_currency).each_with_index do |variant, index| %>
-              <li>
-                <%= radio_button_tag "products[#{@product.id}]", variant.id, index == 0, 'data-price' => variant.price_in(current_currency).display_price, 'data-heading' => variant.option_value("heading").downcase %>
-                <label for="<%= ['products', @product.id, variant.id].join('_') %>">
+        <div class="add-to-cart">
 
-                  <img src="/assets/store/pleats/<%= variant.option_value("heading").downcase %>.jpg" />
+          <%# --- Quantity of product or variant --- %>
+          <%= hidden_field_tag (@product.variants_and_option_values.any? ? :quantity : "variants[#{@product.master.id}]"), 1 %>
+          
+          <%# --- Dynamic price --- %>
+          <%= hidden_field_tag :price, 49 %>
+          
+          <%# --- Required curtain spec --- %>
+          <%= hidden_field_tag :spec, "N/A" %>
 
-                  <span class="variant-description">
-                    <%= variant_options variant %>
-                  </span>
-                  <% if variant_price variant %>
-                    <span class="price diff"><%= variant_price variant %></span>
-                  <% end %>
-                </label>
-              </li>
-            <% end %>
-          </ul>
+          <%= check_box_tag 'cm_measurements', 'accepted', false %>
+          <span id="measurements_text">I accept that measurements are in 'cm' <u>(not 'inches')</u></span>
+          
+          <br class="clear">
+
+          <%= button_tag :class => 'large primary', :id => 'add-to-cart-button', :type => :submit do %>
+            <%= Spree.t(:add_to_cart) %>
+          <% end %>
+          
         </div>
-      <% end %>
-      
-<div class="add-to-cart">
-
-  <%# --- Quantity of product or variant --- %>
-  <%= hidden_field_tag (@product.variants_and_option_values.any? ? :quantity : "variants[#{@product.master.id}]"), 1 %>
   
-  <%# --- Dynamic price --- %>
-  <%= hidden_field_tag :price, 49 %>
-  
-  <%# --- Required curtain spec --- %>
-  <%= hidden_field_tag :spec, "N/A" %>
-
-  <%= button_tag :class => 'large primary', :id => 'add-to-cart-button', :type => :submit do %>
-    <%= Spree.t(:add_to_cart) %>
-  <% end %>
-  
-</div>
-  
-  <br class="clear">
-  <span id="page-link-to-cart" data-hook class="cart-indicator"><%= link_to_cart %></span>
-<% end %> <%# END: 'form_for :order, ...' %>
+        <br class="clear">
+        
+        <span id="page-link-to-cart" data-hook class="cart-indicator"><%= link_to_cart %></span>
+      <% end %> <%# END: 'form_for :order, ...' %>
       
     </div>
   </div>
-  
 </div>
-
