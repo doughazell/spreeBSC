@@ -200,6 +200,10 @@ $ ->
 
   # ----------------- Submit ------------------    
   $(document).on('click', '#add-to-cart-button', ( ->
+    unless total_price > 0
+      return false
+    # ---
+    
     # Send the dynamic price back to the server via '#price' <input> tag to the <form>
     ($ '#price').val(total_price)
     
@@ -214,7 +218,6 @@ $ ->
   ))
   # ---
 
-  
   # ----------------- On-load ------------------
   #<% debugger %> - Needs '.erb' appended onto filename extension
   # Gets current state of asset pipeline when this file is compiled (which is based on filename extension stack)

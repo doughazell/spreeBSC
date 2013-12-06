@@ -52,7 +52,7 @@ module Spree
       populator = Spree::OrderPopulator.new(current_order(true), current_currency)
 
       # 17/10/13 DH: Added 'price' to be later added to 'variant'
-      # 18/11/13 DH: Added 'spec' to be later added to the Order Special Instructions for curtain details.
+      # 18/11/13 DH: Added 'spec' to be later added to 'variant' for curtain details.
       if populator.populate(params.slice(:products, :variants, :quantity, :price, :spec))
         current_order.create_proposed_shipments if current_order.shipments.any?
 
@@ -75,7 +75,7 @@ module Spree
       
       posted_xml = params[:xml]
 
-      # Remove XHTML character encoding (hopefully won't need to do this we receive XML message from RomanCart!)
+      # Remove XHTML character encoding (hopefully won't need to do this when we receive XML message from RomanCart!)
       xml = posted_xml.sub("<?xml version='1.0' encoding='UTF-8'?>", "")
       
       xml_doc  = Nokogiri::XML(xml)   
@@ -105,7 +105,7 @@ module Spree
         flash[:message] = "Order number taken from current time!"
         @order.number = Time.now.to_i.to_s
         
-        # ----------------------- Billing Address ------------------------------
+        # ----------------------- Billing Address -------------------------------
         @order.bill_address = romancartAddress(xml_doc)
         # ----------------------- Delivery Address ------------------------------        
         #<delivery-address1/>
@@ -115,30 +115,42 @@ module Spree
           @order.ship_address = romancartAddress(xml_doc, "delivery-")
         end
         
-        # Spree StateMachine = 1)cart -> 2)address -> 3)deliver -> 4)payment -> 5)confirm -> 6)complete
+        # Spree StateMachine = 1)cart -> 2)address -> 3)delivery -> 4)payment -> 5)confirm -> 6)complete
 #debugger
-        while @order.state != "payment"
-          @order.next!
-        end
-
-        if xml_doc.xpath("/romancart-transaction-data/paid-flag").first.content.eql?("True")
-
-          unless @order.payments.exists?
-            @order.payments.create!(:amount => @order.total)
-            @order.payments.last.payment_method = Spree::PaymentMethod.find_by_name("RomanCart")
+        # If the order is just for samples then it'll be free so no payment is required
+        if @order.item_total == 0
+          
+          while @order.state != "complete"
+            @order.next!
           end
           
-          # '@order.payments' is an array so need to get last one entered to access 'Spree::Payment' methods
-          @order.payments.last.complete
+        else
           
-          @order.payment_total = @order.total
+          while @order.state != "payment"
+            @order.next!
+          end
+          
+          if xml_doc.xpath("/romancart-transaction-data/paid-flag").first.content.eql?("True")
 
-          # To 6 - Complete
-          @order.state = "complete"
-          @order.completed_at = Time.now
-           
-          @order.save!
+            unless @order.payments.exists?
+              @order.payments.create!(:amount => @order.total)
+              @order.payments.last.payment_method = Spree::PaymentMethod.find_by_name("RomanCart")
+            end
+            
+            # '@order.payments' is an array so need to get last one entered to access 'Spree::Payment' methods
+            @order.payments.last.complete
+            
+            @order.payment_total = @order.total
+
+            # To 6 - Complete
+            @order.state = "complete"
+            @order.completed_at = Time.now
+             
+            @order.save!
+          end
+
         end
+
 
         # -------------------------------------------------------------        
         #@order.shipments.create!

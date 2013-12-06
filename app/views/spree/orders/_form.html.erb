@@ -14,6 +14,8 @@
 
           <table id="product-properties" class="table-display" data-hook>
             <tbody>
+
+<%# debugger %>
             
               <%# ----------------------------------------------------- %>
               <%# @order.special_instructions.split(',').each do |spec| %>
@@ -23,24 +25,34 @@
                 <% category, value = spec.split('=') %>
                 
                 <tr>
-                  <td class="bsc-spec-category"><strong><%= category.capitalize %></strong></td>
-                  <% if category == "width" || category == "drop" %>
-                    <td><%= value + " cm" %></td>
+                  <% if value %>
+                    
+                    <td class="bsc-spec-category"><strong><%= category.capitalize %></strong></td>
+                    
+                    <% if category == "width" || category == "drop" %>
+                      <td><%= value + " cm" %></td>
+                    <% else %>
+                      <td><%= value %></td>
+                    <% end %>
+                    
                   <% else %>
-                    <td><%= value %></td>
+                    
+                    <td class="bsc-spec-category"><strong><%= item_form.object.variant.option_value("silk") %></strong></td>
+                  
                   <% end %>
                 </tr>
+                
               <% end %>
           
               <%= product_image(item_form.object.variant.product, :itemprop => "image") %>
 
-              <img src="/assets/store/pleats/<%= item_form.object.variant.option_value("heading").downcase %>.jpg" />
+              <% if heading = item_form.object.variant.option_value("heading") %>
+                <img src="/assets/store/pleats/<%= heading.downcase %>.jpg" />
+              <% end %>
                   
             </tbody>
           </table>
           <br>
-          
-<%# debugger %>
           
           <%# ----------------------------------------------------------------------------- %>
           <%# We also need to pass the spec in brackets after the curtain name (so that the %>

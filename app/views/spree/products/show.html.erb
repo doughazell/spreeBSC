@@ -101,8 +101,6 @@ pattern_repeat: patternRepeat
       </tr>
     </table>
   </div>
-  
-  <br class="clear">
 
   <div class="columns sixteen alpha" data-hook="bsc-form-cols">
     <div class="row" data-hook="bsc-form-row">
@@ -117,9 +115,36 @@ pattern_repeat: patternRepeat
 ----------------------------------------------------------------
 <%
 =end %>
+
+      <%# -------------------------- Sample form --------------------------- %>
+      <%= form_for :order, :url => populate_orders_path, :remote => true do |f| %>
+        <%# --- Sample --- %>
+        <%= button_tag :class => 'small secondary', :id => 'add-sample-to-cart-button', :type => :submit do %>
+          request sample
+        <% end %>
+        
+        <% if @product.variants_and_option_values(current_currency).any? %>
+          <% @product.variants_and_option_values(current_currency).each_with_index do |variant, index| %>
+            <% if variant.option_value("silk") %>
+              <%= hidden_field_tag "products[#{@product.id}]", variant.id, :id => 'sample-variant' %>
+            <% end %>
+          <% end %>
+        <% end %>
+        
+        <%# --- Quantity of product or variant --- %>
+        <%= hidden_field_tag (@product.variants_and_option_values.any? ? :quantity : "variants[#{@product.master.id}]"), 1 %>
+        
+        <%# --- Dynamic price --- %>
+        <%= hidden_field_tag :price, 0, :id => 'sample-price' %>
+        
+        <%# --- Required curtain spec --- %>
+        <%= hidden_field_tag :spec, "N/A", :id => 'sample-spec' %>
       
-      <%# --- This gets made into AJAX form by '/app/overrides/ajax_cart_form.rb' --- %>
-      <%= form_for :order, :url => populate_orders_path do |f| %>
+      <% end %> <%# END: 'form_for :order, ...' %>
+
+      <%# -------------------------- Curtain spec form --------------------------- %>            
+      <%# --- This used to get made into AJAX form by '/app/overrides/ajax_cart_form.rb' but adding ":remote => true" here now --- %>
+      <%= form_for :order, :url => populate_orders_path, :remote => true do |f| %>
 
         <%# --- Width and Drop --- %>
         <h5 class="product-section-title">Curtain width</h5>
@@ -134,25 +159,29 @@ pattern_repeat: patternRepeat
                                                      ['Blackout',2,{'data-type' => 'blackout'}],
                                                      ['Thermal', 3,{'data-type' => 'thermal'}] ], 1) %>
         
-        <%# --- Variants --- %>
+        <%# --- Heading Variants --- %>
         <% if @product.variants_and_option_values(current_currency).any? %>
           <div id="product-variants" class="columns five alpha">
             <h5 class="product-section-title"><%= Spree.t(:variants) %></h5>
             <ul>
               <% @product.variants_and_option_values(current_currency).each_with_index do |variant, index| %>
                 <li>
-                  <%= radio_button_tag "products[#{@product.id}]", variant.id, index == 0, 'data-price' => variant.price_in(current_currency).display_price, 'data-heading' => variant.option_value("heading").downcase %>
-                  <label for="<%= ['products', @product.id, variant.id].join('_') %>">
+                
+                  <% if heading = variant.option_value("heading") %>
+                    <%= radio_button_tag "products[#{@product.id}]", variant.id, index == 0, 'data-price' => variant.price_in(current_currency).display_price, 'data-heading' => heading.downcase %>
+                    <label for="<%= ['products', @product.id, variant.id].join('_') %>">
 
-                    <img src="/assets/store/pleats/<%= variant.option_value("heading").downcase %>.jpg" />
+                      <img src="/assets/store/pleats/<%= heading.downcase %>.jpg" />
 
-                    <span class="variant-description">
-                      <%= variant_options variant %>
-                    </span>
-                    <% if variant_price variant %>
-                      <span class="price diff"><%= variant_price variant %></span>
-                    <% end %>
-                  </label>
+                      <span class="variant-description">
+                        <%= variant_options variant %>
+                      </span>
+                      <% if variant_price variant %>
+                        <span class="price diff"><%= variant_price variant %></span>
+                      <% end %>
+                    </label>
+                  <% end %>
+
                 </li>
               <% end %>
             </ul>

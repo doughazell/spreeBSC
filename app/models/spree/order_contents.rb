@@ -10,7 +10,12 @@ module Spree
     # Add variant qty to line_item
     def add(variant, quantity, currency=nil, shipment=nil)
       line_item = order.find_line_item_by_variant(variant)
-      add_to_line_item(line_item, variant, quantity, currency, shipment)
+#debugger
+      # 4/12/13 DH: Only allow 1 variant sample per order
+      unless variant.option_value("silk") == "Sample" and line_item
+        line_item = add_to_line_item(line_item, variant, quantity, currency, shipment)
+      end
+      line_item
     end
 
     # Get current line item for variant
@@ -35,8 +40,11 @@ module Spree
         line_item.currency = currency unless currency.nil?
         
         if @bscDynamicPrice
-          line_item.price            = @bscDynamicPrice
+          line_item.price    = @bscDynamicPrice
           line_item.bsc_spec = @bscSpec
+
+          # 4/12/13 DH: No longer adding the curtain spec to the variant since this causes a data race for multiple
+          #             concurrent users and prevents someone ordering the same variant for multiple windows. 
           
           #line_item.variant.bsc_spec = @bscSpec
           #line_item.variant.save
@@ -59,6 +67,9 @@ module Spree
           line_item.price    = @bscDynamicPrice
           line_item.bsc_spec = @bscSpec
           
+          # 4/12/13 DH: No longer adding the curtain spec to the variant since this causes a data race for multiple
+          #             concurrent users and prevents someone ordering the same variant for multiple windows. 
+
           #line_item.variant.bsc_spec = @bscSpec
           #line_item.variant.save
         end  
