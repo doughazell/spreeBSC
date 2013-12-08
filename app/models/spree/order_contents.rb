@@ -15,6 +15,7 @@ module Spree
       unless variant.option_value("silk") == "Sample" and line_item
         line_item = add_to_line_item(line_item, variant, quantity, currency, shipment)
       end
+      
       line_item
     end
 
