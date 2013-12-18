@@ -26,6 +26,8 @@ Spree::AppConfiguration.class_eval do
   preference :thermal_lining, :float
   preference :thermal_lining_labour, :integer
   
+  preference :curtain_maker_email, :string
+  
 end
 
 # These values get automatically put into the 'spree_preferences' table in the DB on startup...nice!
@@ -52,3 +54,6 @@ Spree::Config[:thermal_lining]  = 4.5
 Spree::Config[:cotton_lining_labour]   = 4
 Spree::Config[:blackout_lining_labour] = 4
 Spree::Config[:thermal_lining_labour]  = 4
+
+#Spree::Config[:mails_from] = "sales@bespokesilkcurtains.com"
+Spree::Config[:curtain_maker_email] = "doughazell@gmail.com"
