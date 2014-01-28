@@ -10,7 +10,7 @@ module Spree
     # Add variant qty to line_item
     def add(variant, quantity, currency=nil, shipment=nil)
       line_item = order.find_line_item_by_variant(variant)
-#debugger
+debugger
       # 4/12/13 DH: Only allow 1 variant sample per order
       unless variant.option_value("silk") == "Sample" and line_item
         line_item = add_to_line_item(line_item, variant, quantity, currency, shipment)
