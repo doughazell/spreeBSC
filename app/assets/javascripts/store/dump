@@ -1,0 +1,35 @@
+###
+    $.ajax '/api/checkouts/R515643866?token=a05aee34ffffbac76fc642ce979c3924b148e022618c15cd',
+      type: 'PUT'
+      dataType: 'html'
+      #error: (jqXHR, textStatus, errorThrown) ->
+      #  $('body').append "AJAX Error: #{textStatus}"
+      #success: (data, textStatus, jqXHR) ->
+      #  $('body').append "Successful AJAX call: #{data}"
+###
+             
+###  
+    request = $.ajax({
+      url: "/api/checkouts/R515643866?token=a05aee34ffffbac76fc642ce979c3924b148e022618c15cd",
+      type: "PUT",
+      dataType: "html"
+    })
+
+    request.done ( msg ) ->
+      $( "#api-response" ).html( msg );
+      alert( "Data Saved: " + msg )
+###
+
+###
+  $.ajax.done( ( msg ) ->
+    alert( "Data Saved: " + msg )
+  )
+###
+
+    $.ajax "/api/checkouts/R515643866?token=a05aee34ffffbac76fc642ce979c3924b148e022618c15cd",
+      type: 'PUT',
+      #{name: "John", time: "2pm"},
+      (data) ->
+        ($ '#api-response').text(data)
+        
+
